@@ -5,6 +5,7 @@
   --secondary: #7a42ff;
   --accent: #27f39e;
   --card: #ffffff;
+  --muted: #5b6a98;
 }
 * { box-sizing: border-box; }
 body {
@@ -26,6 +27,14 @@ nav a { color: #d9e6ff; text-decoration: none; white-space: nowrap; font-size: .
 .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
 section { margin: 1.4rem 0 2rem; }
 h2 { margin-bottom: .8rem; color: #1f2a56; }
+.eyebrow {
+  margin: 0;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #5e73b5;
+}
 .hero {
   padding: 2rem;
   border-radius: 18px;
@@ -56,6 +65,12 @@ h2 { margin-bottom: .8rem; color: #1f2a56; }
   border-radius: 14px;
   padding: 1rem;
   box-shadow: 0 8px 20px rgba(39, 60, 135, 0.08);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(39, 60, 135, 0.16);
+  border-color: #b8cbff;
 }
 .meta-row { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; color: #3d4c86; }
 .badge { background: #e9fffa; color: #107956; border-radius: 999px; padding: .2rem .6rem; display: inline-block; margin: .5rem 0; }
@@ -72,6 +87,62 @@ input, select, textarea {
 .item-block { border-top: 1px solid #e6ecff; margin-top: .8rem; padding-top: .8rem; }
 .progress-bar { width: 100%; height: 14px; border-radius: 999px; background: #e6ebff; overflow: hidden; }
 .progress-bar > div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); }
+.command-center {
+  background:
+    radial-gradient(circle at top right, rgba(122, 66, 255, .12), transparent 42%),
+    radial-gradient(circle at top left, rgba(39, 243, 158, .12), transparent 35%),
+    #fff;
+}
+.command-center h2 {
+  margin: .2rem 0 .35rem;
+}
+.command-center p {
+  color: var(--muted);
+}
+.workflow-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: .8rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.workflow-card {
+  border: 1px solid #dce6ff;
+  border-radius: 12px;
+  padding: .9rem;
+  background: #f9fbff;
+}
+.workflow-card h3 {
+  margin: .15rem 0 .4rem;
+  font-size: 1rem;
+}
+.workflow-card p {
+  margin: 0;
+}
+.workflow-index {
+  color: #4f64a5;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.workflow-card.done {
+  border-color: #a9f0cf;
+  background: #f3fffa;
+}
+.status-pill {
+  font-size: .75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: .25rem .6rem;
+}
+.status-pill.success {
+  color: #0f7454;
+  background: #ddffee;
+}
+.status-pill.pending {
+  color: #6c5f15;
+  background: #fff7cf;
+}
 .col-span { grid-column: 1 / -1; }
 .wrap { align-items: center; }
 .btn-label { display: inline-flex; align-items: center; gap: .4rem; }
