@@ -10,6 +10,7 @@ import AiIotIdeaCard from './components/AiIotIdeaCard'
 import DashboardStats from './components/DashboardStats'
 import SearchFilter from './components/SearchFilter'
 import Footer from './components/Footer'
+import MotionSection from './components/MotionSection'
 import { aiIotIdeas, datasets, learningPaths, mentors, topics, userSegments } from './data'
 import { exportAllData, getLocal, importAllData, resetAllData, setLocal } from './utils/storage'
 
@@ -135,15 +136,15 @@ function App() {
       <main className="container">
         <Hero workflowPercent={workflowPercent} />
 
-        <section id="about">
+        <MotionSection id="about" delay={60}>
           <p className="eyebrow">Tentang Platform</p>
           <h2 className="heading-md">About NIBM 7.0</h2>
           <p className="body-text">Platform edukasi dan riset Nanoimmunobiotechnomedicine untuk pelajar hingga profesional.</p>
-        </section>
+        </MotionSection>
 
-        <section className="grid cols-4">{userSegments.map((segment) => <UserSegmentCard key={segment.title} {...segment} />)}</section>
+        <MotionSection className="grid cols-4" delay={100}>{userSegments.map((segment, i) => <div key={segment.title} style={{ transitionDelay: `${100 + i * 90}ms` }} className="motion-item"><UserSegmentCard {...segment} /></div>)}</MotionSection>
 
-        <section id="paths">
+        <MotionSection id="paths" delay={130}>
           <p className="eyebrow">Belajar Terstruktur</p>
           <h2 className="heading-md">Learning Paths</h2>
           <div className="grid cols-2">
@@ -155,33 +156,33 @@ function App() {
               </article>
             ))}
           </div>
-        </section>
+        </MotionSection>
 
-        <section id="topics">
+        <MotionSection id="topics" delay={160}>
           <h2 className="heading-md">Topics</h2>
           <SearchFilter search={topicSearch} setSearch={setTopicSearch} filterValue={topicFilter} setFilterValue={setTopicFilter} options={['Beginner', 'Intermediate', 'Advanced', 'Biology', 'Technology', 'AI', 'Medicine', 'Research']} label="level/kategori" />
           <div className="grid topic-grid">
-            {filteredTopics.map((topic) => <TopicCard key={topic.id} topic={topic} isSaved={savedTopics.includes(topic.id)} isLearned={learnedTopics.includes(topic.id)} onSave={(id) => toggleSaved(id, savedTopics, setSavedTopics, 'savedTopics', 'Topic updated')} onLearn={(id) => toggleSaved(id, learnedTopics, setLearnedTopics, 'learnedTopics', 'Progress updated')} />)}
+            {filteredTopics.map((topic, i) => <div key={topic.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><TopicCard topic={topic} isSaved={savedTopics.includes(topic.id)} isLearned={learnedTopics.includes(topic.id)} onSave={(id) => toggleSaved(id, savedTopics, setSavedTopics, 'savedTopics', 'Topic updated')} onLearn={(id) => toggleSaved(id, learnedTopics, setLearnedTopics, 'learnedTopics', 'Progress updated')} /></div>)}
           </div>
-        </section>
+        </MotionSection>
 
-        <section id="datasets">
+        <MotionSection id="datasets" delay={190}>
           <div className="row-between"><h2 className="heading-md">Dataset & Big Data</h2><button className="btn-secondary" onClick={() => setDatasetView((v) => (v === 'card' ? 'table' : 'card'))}>View: {datasetView}</button></div>
           <SearchFilter search={datasetSearch} setSearch={setDatasetSearch} filterValue={datasetFilter} setFilterValue={setDatasetFilter} options={[...new Set(allDatasets.map((item) => item.category))]} label="kategori" />
           {datasetView === 'card' ? (
-            <div className="grid cols-3">{filteredDatasets.map((dataset) => <DatasetCard key={dataset.id} dataset={dataset} isSaved={savedDatasets.includes(dataset.id)} onSave={(id) => toggleSaved(id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')} />)}</div>
+            <div className="grid cols-3">{filteredDatasets.map((dataset, i) => <div key={dataset.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><DatasetCard dataset={dataset} isSaved={savedDatasets.includes(dataset.id)} onSave={(id) => toggleSaved(id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')} /></div>)}</div>
           ) : (
             <div className="table-wrap card"><table><thead><tr><th>Name</th><th>Category</th><th>Format</th><th>Action</th></tr></thead><tbody>{filteredDatasets.map((d) => <tr key={d.id}><td>{d.name}</td><td>{d.category}</td><td>{d.format}</td><td><button className="btn-primary" onClick={() => toggleSaved(d.id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')}>Save</button></td></tr>)}</tbody></table></div>
           )}
-        </section>
+        </MotionSection>
 
-        <section id="mentors"><h2 className="heading-md">Tutors & Mentors</h2><SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} options={[]} label="mentor" /><div className="grid cols-3">{filteredMentors.map((mentor) => <MentorCard key={mentor.id} mentor={mentor} isSaved={savedMentors.includes(mentor.id)} onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors', 'Mentor saved')} />)}</div></section>
+        <MotionSection id="mentors" delay={220}><h2 className="heading-md">Tutors & Mentors</h2><SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} options={[]} label="mentor" /><div className="grid cols-3">{filteredMentors.map((mentor, i) => <div key={mentor.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><MentorCard mentor={mentor} isSaved={savedMentors.includes(mentor.id)} onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors', 'Mentor saved')} /></div>)}</div></MotionSection>
 
-        <section id="research"><h2 className="heading-md">Research Hub</h2><div className="grid cols-2"><ResearchIdeaForm onSubmit={saveResearchIdea} editingIdea={editingIndex !== null ? researchIdeas[editingIndex] : null} onCancelEdit={() => setEditingIndex(null)} /><article className="card"><h3>Daftar Ide Riset</h3>{researchIdeas.map((idea, index) => <div className="item-block" key={idea.id}><h4>{idea.title}</h4><p className="body-text">{idea.background}</p><button className="btn-secondary" onClick={() => setEditingIndex(index)}>Edit</button></div>)}</article></div></section>
+        <MotionSection id="research" delay={250}><h2 className="heading-md">Research Hub</h2><div className="grid cols-2"><ResearchIdeaForm onSubmit={saveResearchIdea} editingIdea={editingIndex !== null ? researchIdeas[editingIndex] : null} onCancelEdit={() => setEditingIndex(null)} /><article className="card"><h3>Daftar Ide Riset</h3>{researchIdeas.map((idea, index) => <div className="item-block" key={idea.id}><h4>{idea.title}</h4><p className="body-text">{idea.background}</p><button className="btn-secondary" onClick={() => setEditingIndex(index)}>Edit</button></div>)}</article></div></MotionSection>
 
-        <section id="aiiot"><h2 className="heading-md">AI & IoT Lab</h2><SearchFilter search={aiSearch} setSearch={setAiSearch} filterValue={aiFilter} setFilterValue={setAiFilter} options={['Intermediate', 'Advanced']} label="difficulty" /><div className="grid cols-3">{filteredAiIot.map((idea) => <AiIotIdeaCard key={idea.id} idea={idea} isSaved={savedAiIotIdeas.includes(idea.id)} onSave={(id) => toggleSaved(id, savedAiIotIdeas, setSavedAiIotIdeas, 'savedAiIotIdeas', 'AI/IoT idea saved')} />)}</div></section>
+        <MotionSection id="aiiot" delay={280}><h2 className="heading-md">AI & IoT Lab</h2><SearchFilter search={aiSearch} setSearch={setAiSearch} filterValue={aiFilter} setFilterValue={setAiFilter} options={['Intermediate', 'Advanced']} label="difficulty" /><div className="grid cols-3">{filteredAiIot.map((idea) => <AiIotIdeaCard key={idea.id} idea={idea} isSaved={savedAiIotIdeas.includes(idea.id)} onSave={(id) => toggleSaved(id, savedAiIotIdeas, setSavedAiIotIdeas, 'savedAiIotIdeas', 'AI/IoT idea saved')} />)}</div></MotionSection>
 
-        <section id="dashboard"><h2 className="heading-md">Progress Dashboard</h2><DashboardStats stats={stats} /><div className="actions wrap"><button className="btn-secondary" onClick={() => { resetAllData(); window.location.reload() }}>Reset</button><button className="btn-secondary" onClick={exportAllData}>Export</button><label className="btn-primary btn-label">Import<input type="file" accept="application/json" onChange={(event) => importAllData(event.target.files?.[0], (ok) => setToast(ok ? 'Import success' : 'Import failed'))} /></label></div></section>
+        <MotionSection id="dashboard" delay={310}><h2 className="heading-md">Progress Dashboard</h2><DashboardStats stats={stats} /><div className="actions wrap"><button className="btn-secondary" onClick={() => { resetAllData(); window.location.reload() }}>Reset</button><button className="btn-secondary" onClick={exportAllData}>Export</button><label className="btn-primary btn-label">Import<input type="file" accept="application/json" onChange={(event) => importAllData(event.target.files?.[0], (ok) => setToast(ok ? 'Import success' : 'Import failed'))} /></label></div></MotionSection>
       </main>
       <Footer />
       {toast && <div className="toast">{toast}</div>}
