@@ -9,7 +9,7 @@ const iconProps = {
   strokeLinejoin: 'round',
 }
 
-const make = (path) => function Icon() { return <svg {...iconProps}>{path}</svg> }
+const make = (path) => function Icon({ className }) { return <svg {...iconProps} className={className}>{path}</svg> }
 
 export const Dna = make(<><path d="M4 4c6 0 10 16 16 16" /><path d="M20 4c-6 0-10 16-16 16" /><path d="M8 8h8" /><path d="M8 16h8" /></>)
 export const Microscope = make(<><path d="M6 18h12" /><path d="M8 18a6 6 0 0 0 6-6" /><path d="M10 3l4 4" /><path d="M14 7l-2 2" /><path d="M10 11l2 2" /></>)
@@ -26,3 +26,12 @@ export const Sparkles = make(<><path d="M12 3l1.5 3.5L17 8l-3.5 1.5L12 13l-1.5-3
 export const CircleDot = make(<><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="2" /></>)
 export const TrendUp = make(<path d="M3 17l6-6 4 4 8-8" />)
 export const BarChart = make(<><path d="M4 20V10" /><path d="M12 20V4" /><path d="M20 20v-7" /></>)
+export const GraduationCap = make(<><path d="M2 9l10-5 10 5-10 5-10-5z" /><path d="M6 11v4c0 1.5 2.7 3 6 3s6-1.5 6-3v-4" /></>)
+export const BookOpen = make(<><path d="M3 5a3 3 0 0 1 3-3h6v18H6a3 3 0 0 0-3 3z" /><path d="M21 5a3 3 0 0 0-3-3h-6v18h6a3 3 0 0 1 3 3z" /></>)
+export const Briefcase = make(<><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5a3 3 0 0 1 6 0v2" /><path d="M3 13h18" /></>)
+export const Stethoscope = make(<><path d="M7 3v6a4 4 0 1 0 8 0V3" /><path d="M15 11v3a4 4 0 1 0 8 0v-1" /><circle cx="22" cy="13" r="2" /></>)
+export const Atom = make(<><circle cx="12" cy="12" r="1" /><path d="M12 12c4-6 8-6 9-2s-3 8-9 2-10-2-9 2 5 4 9-2z" /><path d="M12 12c6 4 6 8 2 9s-8-3-2-9-2-10 2-9 4 5-2 9z" /></>)
+export const Heart = make(<path d="M12 21s-7-4.35-9.2-8.1A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.2 6.9C19 16.65 12 21 12 21z" />)
+export const Sun = make(<><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="M4.9 4.9l1.4 1.4" /><path d="M17.7 17.7l1.4 1.4" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="M4.9 19.1l1.4-1.4" /><path d="M17.7 6.3l1.4-1.4" /></>)
+export const Moon = make(<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 1 0 9.8 9.8z" />)
+export const PartyPopper = make(<><path d="M4 4l8 8" /><path d="M12 12l8-8" /><path d="M3 21l6-6" /><path d="M15 15l6 6" /><path d="M9 9l6 6" /></>)

@@ -1,35 +1,47 @@
 import { memo } from 'react'
-import { ArrowRight, Brain, Database, Dna, Microscope } from './icons'
+import { ArrowRight, Atom, Brain, Database, Dna, Heart, Microscope } from './icons'
 
-const levelClass = {
-  Beginner: 'badge beginner',
-  Intermediate: 'badge intermediate',
-  Advanced: 'badge advanced',
+const statusClass = {
+  Completed: 'status completed',
+  'In Progress': 'status progress',
+  'Not Started': 'status idle',
 }
 
 const iconByCategory = {
   Biology: Dna,
   Technology: Microscope,
   AI: Brain,
-  Medicine: Microscope,
+  Medicine: Atom,
   Research: Database,
 }
 
-function TopicCard({ topic, isSaved, isLearned, onSave, onLearn }) {
+function TopicCard({ topic, isSaved, status, onSave, onLearn }) {
   const Icon = iconByCategory[topic.category] || Dna
+  const cta = status === 'Completed' ? 'Review' : status === 'In Progress' ? 'Continue' : 'Start'
 
   return (
-    <article className="topic-card card">
-      <div className="thumb" aria-hidden><Icon /></div>
+    <article
+      className="topic-card card"
+      tabIndex={0}
+      role="button"
+      aria-label={`${topic.title} - ${status}`}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter') onLearn(topic.id)
+      }}
+    >
+      <span className={statusClass[status]}>{status}</span>
+      <button className={`save-icon ${isSaved ? 'saved' : ''}`} aria-label={isSaved ? 'Remove bookmark' : 'Bookmark topic'} onClick={() => onSave(topic.id)}>
+        <Heart />
+      </button>
+      <div className="thumb topic-thumb" aria-hidden><Icon /></div>
       <h3>{topic.title}</h3>
       <p className="body-text">{topic.description}</p>
-      <div className="meta-row">
-        <span className={levelClass[topic.level] || 'badge'}>{topic.level}</span>
-        <span className="badge category">{topic.category}</span>
+      <div className="tags compact">
+        <span className="tag dot-tag"><span className="dot" />{topic.level}</span>
+        <span className="tag accent dot-tag"><span className="dot" />{topic.category}</span>
       </div>
-      <div className="actions stacked">
-        <button className="btn-primary full" onClick={() => onLearn(topic.id)}>{isLearned ? 'Completed' : 'Start Learning'} <ArrowRight /></button>
-        <button className="btn-secondary full" onClick={() => onSave(topic.id)}>{isSaved ? 'Bookmarked' : 'Save Topic'}</button>
+      <div className="card-overlay-action">
+        <button className="btn-primary full" onClick={() => onLearn(topic.id)}>{cta} <ArrowRight /></button>
       </div>
     </article>
   )
