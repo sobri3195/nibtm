@@ -1,19 +1,23 @@
+import { memo } from 'react'
+
 function DatasetCard({ dataset, isSaved, onSave }) {
   return (
-    <article className="card">
-      <h3>{dataset.name}</h3>
-      <p>{dataset.description}</p>
+    <article className="card dataset-card">
+      <div className="meta-row">
+        <h3>{dataset.name}</h3>
+        <span className="badge">{dataset.category}</span>
+      </div>
+      <p className="body-text">{dataset.description}</p>
       <div className="meta-row">
         <span>Format: {dataset.format}</span>
         <span>Sampel: {dataset.samples}</span>
       </div>
-      <span className="badge">{dataset.category}</span>
       <div className="actions">
-        <button className="outline">View Details</button>
-        <button onClick={() => onSave(dataset.id)}>{isSaved ? 'Saved' : 'Save Dataset'}</button>
+        <button className="btn-secondary" aria-label={`Preview ${dataset.name}`}>Preview</button>
+        <button className="btn-primary" onClick={() => onSave(dataset.id)}>{isSaved ? 'Saved' : 'Download'}</button>
       </div>
     </article>
   )
 }
 
-export default DatasetCard
+export default memo(DatasetCard)
