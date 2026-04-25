@@ -155,13 +155,75 @@ function App() {
     totalTopics: allTopics.length,
   }
 
+  const workflowSteps = [
+    {
+      id: 'step-explore',
+      title: 'Eksplorasi topik dasar',
+      description: 'Pilih minimal 1 topik untuk disimpan sebagai fokus belajar minggu ini.',
+      done: savedTopics.length > 0,
+      cta: { label: 'Lihat Topik', href: '#topics' },
+    },
+    {
+      id: 'step-data',
+      title: 'Siapkan data latihan',
+      description: 'Simpan dataset yang relevan agar bisa langsung dipakai saat praktik.',
+      done: savedDatasets.length > 0,
+      cta: { label: 'Buka Dataset', href: '#datasets' },
+    },
+    {
+      id: 'step-mentor',
+      title: 'Diskusi dengan mentor',
+      description: 'Tentukan mentor untuk validasi rencana riset dan arah belajar.',
+      done: savedMentors.length > 0,
+      cta: { label: 'Cari Mentor', href: '#mentors' },
+    },
+    {
+      id: 'step-research',
+      title: 'Eksekusi ide riset',
+      description: 'Susun ide riset pertama, lalu lanjutkan ke AI & IoT Lab.',
+      done: researchIdeas.length > 0 || savedAiIotIdeas.length > 0,
+      cta: { label: 'Mulai Riset', href: '#research' },
+    },
+  ]
+  const completedWorkflow = workflowSteps.filter((step) => step.done).length
+  const workflowPercent = Math.round((completedWorkflow / workflowSteps.length) * 100)
+
   return (
     <div>
       <Navbar />
       <main className="container">
         <Hero />
 
+        <section className="command-center card">
+          <div>
+            <p className="eyebrow">Learning Command Center</p>
+            <h2>Progress kamu: {workflowPercent}%</h2>
+            <p>
+              Workflow ini bantu kamu bergerak dari eksplorasi topik sampai implementasi riset secara bertahap.
+            </p>
+          </div>
+          <div className="progress-bar">
+            <div style={{ width: `${workflowPercent}%` }} />
+          </div>
+          <div className="workflow-grid">
+            {workflowSteps.map((step, index) => (
+              <article key={step.id} className={`workflow-card ${step.done ? 'done' : ''}`}>
+                <p className="workflow-index">Step {index + 1}</p>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                <div className="actions">
+                  <span className={`status-pill ${step.done ? 'success' : 'pending'}`}>
+                    {step.done ? 'Selesai' : 'Belum selesai'}
+                  </span>
+                  <a href={step.cta.href} className="btn btn-secondary">{step.cta.label}</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section id="about">
+          <p className="eyebrow">Tentang Platform</p>
           <h2>About NiBTM 7.0</h2>
           <p>
             NiBTM 7.0 adalah platform edukasi dan riset Nanoimmunobiotechnomedicine yang ramah untuk siswa SMP/SMA,
@@ -174,6 +236,7 @@ function App() {
         </section>
 
         <section id="paths">
+          <p className="eyebrow">Belajar Terstruktur</p>
           <h2>Learning Paths</h2>
           <div className="grid cols-2">
             {learningPaths.map((path) => (
@@ -191,6 +254,7 @@ function App() {
         </section>
 
         <section id="topics">
+          <p className="eyebrow">Mulai dari Fondasi</p>
           <h2>Topics</h2>
           <SearchFilter
             search={topicSearch}
@@ -215,6 +279,7 @@ function App() {
         </section>
 
         <section id="datasets">
+          <p className="eyebrow">Latihan Data Nyata</p>
           <h2>Dataset & Big Data</h2>
           <SearchFilter
             search={datasetSearch}
@@ -237,6 +302,7 @@ function App() {
         </section>
 
         <section id="mentors">
+          <p className="eyebrow">Pendampingan Expert</p>
           <h2>Tutors & Mentors</h2>
           <SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} />
           <div className="grid cols-3">
@@ -252,6 +318,7 @@ function App() {
         </section>
 
         <section id="community">
+          <p className="eyebrow">Kolaborasi</p>
           <h2>Student Community</h2>
           <div className="grid cols-2">
             <article className="card">
@@ -271,6 +338,7 @@ function App() {
         </section>
 
         <section id="research">
+          <p className="eyebrow">Dari Ide ke Rencana</p>
           <h2>Research Hub</h2>
           <div className="grid cols-2">
             <ResearchIdeaForm
@@ -298,6 +366,7 @@ function App() {
         </section>
 
         <section id="aiiot">
+          <p className="eyebrow">Eksperimen Lanjutan</p>
           <h2>AI & IoT Lab</h2>
           <SearchFilter
             search={aiSearch}
@@ -320,6 +389,7 @@ function App() {
         </section>
 
         <section id="dashboard">
+          <p className="eyebrow">Ringkasan Kinerja</p>
           <h2>Progress Dashboard</h2>
           <DashboardStats stats={stats} />
           <div className="actions wrap">
@@ -333,6 +403,7 @@ function App() {
         </section>
 
         <section id="admin">
+          <p className="eyebrow">Kontrol Konten</p>
           <h2>Admin Mini Panel</h2>
           <p>Tambahkan data baru dan otomatis tampil di halaman terkait.</p>
           <div className="grid cols-2">
