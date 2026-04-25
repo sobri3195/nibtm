@@ -11,10 +11,13 @@ import DashboardStats from './components/DashboardStats'
 import SearchFilter from './components/SearchFilter'
 import Footer from './components/Footer'
 import MotionSection from './components/MotionSection'
+import { Atom, Dna, FlaskConical, Stethoscope } from './components/icons'
 import { aiIotIdeas, datasets, learningPaths, mentors, topics, userSegments } from './data'
 import { exportAllData, getLocal, importAllData, resetAllData, setLocal } from './utils/storage'
 
 const withCustom = (base, custom) => [...base, ...custom]
+const topicTabs = ['All', 'In Progress', 'Completed', 'Bookmarked', 'Not Started']
+const pathIcons = [Dna, FlaskConical, Stethoscope, Atom]
 
 function App() {
   const [darkMode, setDarkMode] = useState(getLocal('darkMode', false))
@@ -32,6 +35,7 @@ function App() {
 
   const [topicSearch, setTopicSearch] = useState('')
   const [topicFilter, setTopicFilter] = useState('all')
+  const [topicStatusFilter, setTopicStatusFilter] = useState('All')
   const [datasetSearch, setDatasetSearch] = useState('')
   const [datasetFilter, setDatasetFilter] = useState('all')
   const [mentorSearch, setMentorSearch] = useState('')
@@ -76,11 +80,21 @@ function App() {
     setToast(message)
   }
 
+  const getTopicStatus = (topicId) => {
+    if (learnedTopics.includes(topicId)) return 'Completed'
+    if (savedTopics.includes(topicId)) return 'In Progress'
+    return 'Not Started'
+  }
+
   const filteredTopics = useMemo(() => allTopics.filter((item) => {
+    const status = getTopicStatus(item.id)
     const matchesSearch = item.title.toLowerCase().includes(debouncedTopicSearch.toLowerCase())
     const matchesFilter = topicFilter === 'all' || item.level === topicFilter || item.category === topicFilter
-    return matchesSearch && matchesFilter
-  }), [allTopics, debouncedTopicSearch, topicFilter])
+    const matchesStatus = topicStatusFilter === 'All'
+      || (topicStatusFilter === 'Bookmarked' && savedTopics.includes(item.id))
+      || topicStatusFilter === status
+    return matchesSearch && matchesFilter && matchesStatus
+  }), [allTopics, debouncedTopicSearch, topicFilter, topicStatusFilter, learnedTopics, savedTopics])
 
   const filteredDatasets = useMemo(() => allDatasets.filter((item) => {
     const matchesSearch = item.name.toLowerCase().includes(datasetSearch.toLowerCase())
@@ -142,27 +156,39 @@ function App() {
           <p className="body-text">Platform edukasi dan riset Nanoimmunobiotechnomedicine untuk pelajar hingga profesional.</p>
         </MotionSection>
 
-        <MotionSection className="grid cols-4" delay={100}>{userSegments.map((segment, i) => <div key={segment.title} style={{ transitionDelay: `${100 + i * 90}ms` }} className="motion-item"><UserSegmentCard {...segment} /></div>)}</MotionSection>
+        <MotionSection className="grid about-grid" delay={100}>{userSegments.map((segment, i) => <div key={segment.title} style={{ transitionDelay: `${100 + i * 100}ms` }} className="motion-item"><UserSegmentCard {...segment} /></div>)}</MotionSection>
 
         <MotionSection id="paths" delay={130}>
           <p className="eyebrow">Belajar Terstruktur</p>
           <h2 className="heading-md">Learning Paths</h2>
           <div className="grid cols-2">
-            {learningPaths.map((path) => (
-              <article key={path.id} className="card learning-path-card">
-                <h3>{path.name}</h3><p className="body-text">{path.description}</p>
-                <span className={`badge ${path.level?.toLowerCase()}`}>{path.level || 'Beginner'}</span>
-                <button className="btn-primary" onClick={() => startPath(path.id)}>{learningPathProgress[path.id] ? 'In Progress' : 'Start Path'}</button>
-              </article>
-            ))}
+            {learningPaths.map((path, idx) => {
+              const Icon = pathIcons[idx] || Dna
+              const isStarted = learningPathProgress[path.id]
+              const progress = isStarted ? 48 : 8
+
+              return (
+                <article key={path.id} className="card learning-path-card">
+                  <div className="meta-row"><div className="icon-pill"><Icon /></div><span className={`badge ${isStarted ? 'in-progress' : 'beginner'}`}>{isStarted ? 'In Progress' : 'Not Started'}</span></div>
+                  <h3>{path.name}</h3>
+                  <p className="body-text">{path.description}</p>
+                  <p className="body-text">Estimated time: {path.duration}</p>
+                  <div className="thin-progress"><div style={{ width: `${progress}%` }} /></div>
+                  <button className="btn-primary" onClick={() => startPath(path.id)}>{isStarted ? 'Continue Path' : 'Start Path'}</button>
+                </article>
+              )
+            })}
           </div>
         </MotionSection>
 
         <MotionSection id="topics" delay={160}>
           <h2 className="heading-md">Topics</h2>
           <SearchFilter search={topicSearch} setSearch={setTopicSearch} filterValue={topicFilter} setFilterValue={setTopicFilter} options={['Beginner', 'Intermediate', 'Advanced', 'Biology', 'Technology', 'AI', 'Medicine', 'Research']} label="level/kategori" />
+          <div className="topic-tabs" role="tablist" aria-label="Topic status filters">
+            {topicTabs.map((tab) => <button key={tab} role="tab" aria-selected={tab === topicStatusFilter} className={`tab-btn ${tab === topicStatusFilter ? 'active' : ''}`} onClick={() => setTopicStatusFilter(tab)}>{tab}</button>)}
+          </div>
           <div className="grid topic-grid">
-            {filteredTopics.map((topic, i) => <div key={topic.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><TopicCard topic={topic} isSaved={savedTopics.includes(topic.id)} isLearned={learnedTopics.includes(topic.id)} onSave={(id) => toggleSaved(id, savedTopics, setSavedTopics, 'savedTopics', 'Topic updated')} onLearn={(id) => toggleSaved(id, learnedTopics, setLearnedTopics, 'learnedTopics', 'Progress updated')} /></div>)}
+            {filteredTopics.map((topic, i) => <div key={topic.id} className="motion-item" style={{ transitionDelay: `${i * 100}ms` }}><TopicCard topic={topic} status={getTopicStatus(topic.id)} isSaved={savedTopics.includes(topic.id)} onSave={(id) => toggleSaved(id, savedTopics, setSavedTopics, 'savedTopics', 'Topic updated')} onLearn={(id) => toggleSaved(id, learnedTopics, setLearnedTopics, 'learnedTopics', 'Progress updated')} /></div>)}
           </div>
         </MotionSection>
 

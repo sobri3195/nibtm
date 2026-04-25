@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Moon, Sun } from './icons'
 
 const links = [
   ['home', 'Home'],
@@ -12,9 +13,28 @@ const links = [
 
 function Navbar({ darkMode, onToggleDarkMode }) {
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('home')
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 10)
+      const nextActive = links.findLast(([id]) => {
+        const el = document.getElementById(id)
+        if (!el) return false
+        const top = el.getBoundingClientRect().top
+        return top <= 120
+      })
+      if (nextActive) setActive(nextActive[0])
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
-    <header className="navbar glass" aria-label="Main navigation">
+    <header className={`navbar glass ${scrolled ? 'scrolled' : ''}`} aria-label="Main navigation">
       <a className="brand" href="#home">NIBM 7.0</a>
       <button
         className={`hamburger ${open ? 'open' : ''}`}
@@ -28,10 +48,10 @@ function Navbar({ darkMode, onToggleDarkMode }) {
       </button>
       <nav className={open ? 'show' : ''}>
         {links.map(([id, label]) => (
-          <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>
+          <a key={id} className={active === id ? 'active' : ''} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>
         ))}
-        <button className="theme-btn" onClick={onToggleDarkMode} aria-label="Toggle dark mode">
-          {darkMode ? '☀️ Light' : '🌙 Dark'}
+        <button className="theme-btn icon-only" onClick={onToggleDarkMode} aria-label="Toggle dark mode">
+          {darkMode ? <Sun /> : <Moon />}
         </button>
       </nav>
     </header>
