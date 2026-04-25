@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import UserSegmentCard from './components/UserSegmentCard'
@@ -10,23 +10,23 @@ import AiIotIdeaCard from './components/AiIotIdeaCard'
 import DashboardStats from './components/DashboardStats'
 import SearchFilter from './components/SearchFilter'
 import Footer from './components/Footer'
-import { aiIotIdeas, communities, datasets, learningPaths, mentors, topics, userSegments } from './data'
+import { aiIotIdeas, datasets, learningPaths, mentors, topics, userSegments } from './data'
 import { exportAllData, getLocal, importAllData, resetAllData, setLocal } from './utils/storage'
 
 const withCustom = (base, custom) => [...base, ...custom]
 
 function App() {
+  const [darkMode, setDarkMode] = useState(getLocal('darkMode', false))
   const [savedTopics, setSavedTopics] = useState(getLocal('savedTopics'))
   const [learnedTopics, setLearnedTopics] = useState(getLocal('learnedTopics'))
   const [savedDatasets, setSavedDatasets] = useState(getLocal('savedDatasets'))
   const [savedMentors, setSavedMentors] = useState(getLocal('savedMentors'))
   const [researchIdeas, setResearchIdeas] = useState(getLocal('researchIdeas'))
   const [savedAiIotIdeas, setSavedAiIotIdeas] = useState(getLocal('savedAiIotIdeas'))
-  const [communityNotes, setCommunityNotes] = useState(getLocal('communityNotes'))
-  const [customTopics, setCustomTopics] = useState(getLocal('customTopics'))
-  const [customDatasets, setCustomDatasets] = useState(getLocal('customDatasets'))
-  const [customMentors, setCustomMentors] = useState(getLocal('customMentors'))
-  const [customAiIotIdeas, setCustomAiIotIdeas] = useState(getLocal('customAiIotIdeas'))
+  const [customTopics] = useState(getLocal('customTopics'))
+  const [customDatasets] = useState(getLocal('customDatasets'))
+  const [customMentors] = useState(getLocal('customMentors'))
+  const [customAiIotIdeas] = useState(getLocal('customAiIotIdeas'))
   const [learningPathProgress, setLearningPathProgress] = useState(getLocal('learningPathProgress', {}))
 
   const [topicSearch, setTopicSearch] = useState('')
@@ -36,25 +36,50 @@ function App() {
   const [mentorSearch, setMentorSearch] = useState('')
   const [aiSearch, setAiSearch] = useState('')
   const [aiFilter, setAiFilter] = useState('all')
-  const [noteInput, setNoteInput] = useState('')
   const [editingIndex, setEditingIndex] = useState(null)
+  const [debouncedTopicSearch, setDebouncedTopicSearch] = useState('')
+  const [toast, setToast] = useState('')
+  const [datasetView, setDatasetView] = useState('card')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedTopicSearch(topicSearch), 250)
+    return () => clearTimeout(timeout)
+  }, [topicSearch])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setLoading(false), 600)
+    return () => clearTimeout(timeout)
+  }, [])
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', darkMode)
+    setLocal('darkMode', darkMode)
+  }, [darkMode])
+
+  useEffect(() => {
+    if (!toast) return undefined
+    const timeout = setTimeout(() => setToast(''), 2000)
+    return () => clearTimeout(timeout)
+  }, [toast])
 
   const allTopics = withCustom(topics, customTopics)
   const allDatasets = withCustom(datasets, customDatasets)
   const allMentors = withCustom(mentors, customMentors)
   const allAiIot = withCustom(aiIotIdeas, customAiIotIdeas)
 
-  const toggleSaved = (id, current, setter, key) => {
+  const toggleSaved = (id, current, setter, key, message = 'Saved') => {
     const updated = current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
     setter(updated)
     setLocal(key, updated)
+    setToast(message)
   }
 
   const filteredTopics = useMemo(() => allTopics.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(topicSearch.toLowerCase())
+    const matchesSearch = item.title.toLowerCase().includes(debouncedTopicSearch.toLowerCase())
     const matchesFilter = topicFilter === 'all' || item.level === topicFilter || item.category === topicFilter
     return matchesSearch && matchesFilter
-  }), [allTopics, topicSearch, topicFilter])
+  }), [allTopics, debouncedTopicSearch, topicFilter])
 
   const filteredDatasets = useMemo(() => allDatasets.filter((item) => {
     const matchesSearch = item.name.toLowerCase().includes(datasetSearch.toLowerCase())
@@ -72,77 +97,22 @@ function App() {
     return matchesSearch && matchesFilter
   }), [allAiIot, aiSearch, aiFilter])
 
-  const addNote = () => {
-    if (!noteInput.trim()) return
-    const updated = [...communityNotes, { id: Date.now(), text: noteInput }]
-    setCommunityNotes(updated)
-    setLocal('communityNotes', updated)
-    setNoteInput('')
-  }
-
   const saveResearchIdea = (idea) => {
-    let updated = []
-    if (editingIndex !== null) {
-      updated = researchIdeas.map((item, idx) => (idx === editingIndex ? { ...idea, id: item.id } : item))
-      setEditingIndex(null)
-    } else {
-      updated = [...researchIdeas, { ...idea, id: Date.now() }]
-    }
+    const updated = editingIndex !== null
+      ? researchIdeas.map((item, idx) => (idx === editingIndex ? { ...idea, id: item.id } : item))
+      : [...researchIdeas, { ...idea, id: Date.now() }]
+    setEditingIndex(null)
     setResearchIdeas(updated)
     setLocal('researchIdeas', updated)
+    setToast('Research idea updated')
   }
 
-  const deleteResearchIdea = (id) => {
-    const updated = researchIdeas.filter((item) => item.id !== id)
-    setResearchIdeas(updated)
-    setLocal('researchIdeas', updated)
-  }
+  const workflowPercent = Math.round((Object.keys(learningPathProgress).length / learningPaths.length) * 100)
 
   const startPath = (pathId) => {
     const updated = { ...learningPathProgress, [pathId]: true }
     setLearningPathProgress(updated)
     setLocal('learningPathProgress', updated)
-  }
-
-  const resetData = () => {
-    resetAllData()
-    window.location.reload()
-  }
-
-  const handleImport = (event) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-    importAllData(file, (ok) => {
-      alert(ok ? 'Import berhasil. Halaman akan dimuat ulang.' : 'Import gagal. Periksa file JSON.')
-      if (ok) window.location.reload()
-    })
-  }
-
-  const handleAddCustom = (event, type) => {
-    event.preventDefault()
-    const formData = Object.fromEntries(new FormData(event.currentTarget).entries())
-    const item = { id: `${type}-${Date.now()}`, ...formData }
-    if (type === 'topic') {
-      const updated = [...customTopics, item]
-      setCustomTopics(updated)
-      setLocal('customTopics', updated)
-    }
-    if (type === 'dataset') {
-      const updated = [...customDatasets, item]
-      setCustomDatasets(updated)
-      setLocal('customDatasets', updated)
-    }
-    if (type === 'mentor') {
-      const updated = [...customMentors, item]
-      setCustomMentors(updated)
-      setLocal('customMentors', updated)
-    }
-    if (type === 'aiiot') {
-      const updated = [...customAiIotIdeas, item]
-      setCustomAiIotIdeas(updated)
-      setLocal('customAiIotIdeas', updated)
-    }
-    event.currentTarget.reset()
   }
 
   const stats = {
@@ -155,297 +125,66 @@ function App() {
     totalTopics: allTopics.length,
   }
 
-  const workflowSteps = [
-    {
-      id: 'step-explore',
-      title: 'Eksplorasi topik dasar',
-      description: 'Pilih minimal 1 topik untuk disimpan sebagai fokus belajar minggu ini.',
-      done: savedTopics.length > 0,
-      cta: { label: 'Lihat Topik', href: '#topics' },
-    },
-    {
-      id: 'step-data',
-      title: 'Siapkan data latihan',
-      description: 'Simpan dataset yang relevan agar bisa langsung dipakai saat praktik.',
-      done: savedDatasets.length > 0,
-      cta: { label: 'Buka Dataset', href: '#datasets' },
-    },
-    {
-      id: 'step-mentor',
-      title: 'Diskusi dengan mentor',
-      description: 'Tentukan mentor untuk validasi rencana riset dan arah belajar.',
-      done: savedMentors.length > 0,
-      cta: { label: 'Cari Mentor', href: '#mentors' },
-    },
-    {
-      id: 'step-research',
-      title: 'Eksekusi ide riset',
-      description: 'Susun ide riset pertama, lalu lanjutkan ke AI & IoT Lab.',
-      done: researchIdeas.length > 0 || savedAiIotIdeas.length > 0,
-      cta: { label: 'Mulai Riset', href: '#research' },
-    },
-  ]
-  const completedWorkflow = workflowSteps.filter((step) => step.done).length
-  const workflowPercent = Math.round((completedWorkflow / workflowSteps.length) * 100)
+  if (loading) {
+    return <main className="container"><div className="skeleton hero-skeleton" /><div className="skeleton" /><div className="skeleton" /></main>
+  }
 
   return (
     <div>
-      <Navbar />
+      <Navbar darkMode={darkMode} onToggleDarkMode={() => setDarkMode((prev) => !prev)} />
       <main className="container">
-        <Hero />
-
-        <section className="command-center card">
-          <div>
-            <p className="eyebrow">Learning Command Center</p>
-            <h2>Progress kamu: {workflowPercent}%</h2>
-            <p>
-              Workflow ini bantu kamu bergerak dari eksplorasi topik sampai implementasi riset secara bertahap.
-            </p>
-          </div>
-          <div className="progress-bar">
-            <div style={{ width: `${workflowPercent}%` }} />
-          </div>
-          <div className="workflow-grid">
-            {workflowSteps.map((step, index) => (
-              <article key={step.id} className={`workflow-card ${step.done ? 'done' : ''}`}>
-                <p className="workflow-index">Step {index + 1}</p>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
-                <div className="actions">
-                  <span className={`status-pill ${step.done ? 'success' : 'pending'}`}>
-                    {step.done ? 'Selesai' : 'Belum selesai'}
-                  </span>
-                  <a href={step.cta.href} className="btn btn-secondary">{step.cta.label}</a>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        <Hero workflowPercent={workflowPercent} />
 
         <section id="about">
           <p className="eyebrow">Tentang Platform</p>
-          <h2>About NiBTM 7.0</h2>
-          <p>
-            NiBTM 7.0 adalah platform edukasi dan riset Nanoimmunobiotechnomedicine yang ramah untuk siswa SMP/SMA,
-            tetap relevan untuk mahasiswa, guru, dosen, peneliti, tenaga kesehatan, dan profesional biomedis.
-          </p>
+          <h2 className="heading-md">About NIBM 7.0</h2>
+          <p className="body-text">Platform edukasi dan riset Nanoimmunobiotechnomedicine untuk pelajar hingga profesional.</p>
         </section>
 
-        <section className="grid cols-4">
-          {userSegments.map((segment) => <UserSegmentCard key={segment.title} {...segment} />)}
-        </section>
+        <section className="grid cols-4">{userSegments.map((segment) => <UserSegmentCard key={segment.title} {...segment} />)}</section>
 
         <section id="paths">
           <p className="eyebrow">Belajar Terstruktur</p>
-          <h2>Learning Paths</h2>
+          <h2 className="heading-md">Learning Paths</h2>
           <div className="grid cols-2">
             {learningPaths.map((path) => (
-              <article key={path.id} className="card">
-                <h3>{path.name}</h3>
-                <p>{path.description}</p>
-                <p><strong>Durasi:</strong> {path.duration}</p>
-                <ul>{path.materials.map((material) => <li key={material}>{material}</li>)}</ul>
-                <button onClick={() => startPath(path.id)}>
-                  {learningPathProgress[path.id] ? 'In Progress' : 'Start'}
-                </button>
+              <article key={path.id} className="card learning-path-card">
+                <h3>{path.name}</h3><p className="body-text">{path.description}</p>
+                <span className={`badge ${path.level?.toLowerCase()}`}>{path.level || 'Beginner'}</span>
+                <button className="btn-primary" onClick={() => startPath(path.id)}>{learningPathProgress[path.id] ? 'In Progress' : 'Start Path'}</button>
               </article>
             ))}
           </div>
         </section>
 
         <section id="topics">
-          <p className="eyebrow">Mulai dari Fondasi</p>
-          <h2>Topics</h2>
-          <SearchFilter
-            search={topicSearch}
-            setSearch={setTopicSearch}
-            filterValue={topicFilter}
-            setFilterValue={setTopicFilter}
-            options={['Beginner', 'Intermediate', 'Advanced', 'Biology', 'Technology', 'AI', 'Medicine', 'Research']}
-            label="level/kategori"
-          />
-          <div className="grid cols-3">
-            {filteredTopics.map((topic) => (
-              <TopicCard
-                key={topic.id}
-                topic={topic}
-                isSaved={savedTopics.includes(topic.id)}
-                isLearned={learnedTopics.includes(topic.id)}
-                onSave={(id) => toggleSaved(id, savedTopics, setSavedTopics, 'savedTopics')}
-                onLearn={(id) => toggleSaved(id, learnedTopics, setLearnedTopics, 'learnedTopics')}
-              />
-            ))}
+          <h2 className="heading-md">Topics</h2>
+          <SearchFilter search={topicSearch} setSearch={setTopicSearch} filterValue={topicFilter} setFilterValue={setTopicFilter} options={['Beginner', 'Intermediate', 'Advanced', 'Biology', 'Technology', 'AI', 'Medicine', 'Research']} label="level/kategori" />
+          <div className="grid topic-grid">
+            {filteredTopics.map((topic) => <TopicCard key={topic.id} topic={topic} isSaved={savedTopics.includes(topic.id)} isLearned={learnedTopics.includes(topic.id)} onSave={(id) => toggleSaved(id, savedTopics, setSavedTopics, 'savedTopics', 'Topic updated')} onLearn={(id) => toggleSaved(id, learnedTopics, setLearnedTopics, 'learnedTopics', 'Progress updated')} />)}
           </div>
         </section>
 
         <section id="datasets">
-          <p className="eyebrow">Latihan Data Nyata</p>
-          <h2>Dataset & Big Data</h2>
-          <SearchFilter
-            search={datasetSearch}
-            setSearch={setDatasetSearch}
-            filterValue={datasetFilter}
-            setFilterValue={setDatasetFilter}
-            options={[...new Set(allDatasets.map((item) => item.category))]}
-            label="kategori"
-          />
-          <div className="grid cols-3">
-            {filteredDatasets.map((dataset) => (
-              <DatasetCard
-                key={dataset.id}
-                dataset={dataset}
-                isSaved={savedDatasets.includes(dataset.id)}
-                onSave={(id) => toggleSaved(id, savedDatasets, setSavedDatasets, 'savedDatasets')}
-              />
-            ))}
-          </div>
+          <div className="row-between"><h2 className="heading-md">Dataset & Big Data</h2><button className="btn-secondary" onClick={() => setDatasetView((v) => (v === 'card' ? 'table' : 'card'))}>View: {datasetView}</button></div>
+          <SearchFilter search={datasetSearch} setSearch={setDatasetSearch} filterValue={datasetFilter} setFilterValue={setDatasetFilter} options={[...new Set(allDatasets.map((item) => item.category))]} label="kategori" />
+          {datasetView === 'card' ? (
+            <div className="grid cols-3">{filteredDatasets.map((dataset) => <DatasetCard key={dataset.id} dataset={dataset} isSaved={savedDatasets.includes(dataset.id)} onSave={(id) => toggleSaved(id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')} />)}</div>
+          ) : (
+            <div className="table-wrap card"><table><thead><tr><th>Name</th><th>Category</th><th>Format</th><th>Action</th></tr></thead><tbody>{filteredDatasets.map((d) => <tr key={d.id}><td>{d.name}</td><td>{d.category}</td><td>{d.format}</td><td><button className="btn-primary" onClick={() => toggleSaved(d.id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')}>Save</button></td></tr>)}</tbody></table></div>
+          )}
         </section>
 
-        <section id="mentors">
-          <p className="eyebrow">Pendampingan Expert</p>
-          <h2>Tutors & Mentors</h2>
-          <SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} />
-          <div className="grid cols-3">
-            {filteredMentors.map((mentor) => (
-              <MentorCard
-                key={mentor.id}
-                mentor={mentor}
-                isSaved={savedMentors.includes(mentor.id)}
-                onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors')}
-              />
-            ))}
-          </div>
-        </section>
+        <section id="mentors"><h2 className="heading-md">Tutors & Mentors</h2><SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} options={[]} label="mentor" /><div className="grid cols-3">{filteredMentors.map((mentor) => <MentorCard key={mentor.id} mentor={mentor} isSaved={savedMentors.includes(mentor.id)} onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors', 'Mentor saved')} />)}</div></section>
 
-        <section id="community">
-          <p className="eyebrow">Kolaborasi</p>
-          <h2>Student Community</h2>
-          <div className="grid cols-2">
-            <article className="card">
-              <h3>Daftar Komunitas</h3>
-              <ul>{communities.map((community) => <li key={community}>{community}</li>)}</ul>
-            </article>
-            <article className="card">
-              <h3>Forum Diskusi Dummy</h3>
-              <p>Contoh topik: “Bagaimana memulai project RNA-seq untuk pemula?”</p>
-              <div className="toolbar">
-                <input value={noteInput} onChange={(e) => setNoteInput(e.target.value)} placeholder="Tambah catatan diskusi" />
-                <button onClick={addNote}>Tambah Catatan</button>
-              </div>
-              <ul>{communityNotes.map((note) => <li key={note.id}>{note.text}</li>)}</ul>
-            </article>
-          </div>
-        </section>
+        <section id="research"><h2 className="heading-md">Research Hub</h2><div className="grid cols-2"><ResearchIdeaForm onSubmit={saveResearchIdea} editingIdea={editingIndex !== null ? researchIdeas[editingIndex] : null} onCancelEdit={() => setEditingIndex(null)} /><article className="card"><h3>Daftar Ide Riset</h3>{researchIdeas.map((idea, index) => <div className="item-block" key={idea.id}><h4>{idea.title}</h4><p className="body-text">{idea.background}</p><button className="btn-secondary" onClick={() => setEditingIndex(index)}>Edit</button></div>)}</article></div></section>
 
-        <section id="research">
-          <p className="eyebrow">Dari Ide ke Rencana</p>
-          <h2>Research Hub</h2>
-          <div className="grid cols-2">
-            <ResearchIdeaForm
-              onSubmit={saveResearchIdea}
-              editingIdea={editingIndex !== null ? researchIdeas[editingIndex] : null}
-              onCancelEdit={() => setEditingIndex(null)}
-            />
-            <article className="card">
-              <h3>Daftar Ide Riset</h3>
-              {researchIdeas.length === 0 && <p>Belum ada ide riset. Mulai dari ide kecilmu hari ini.</p>}
-              {researchIdeas.map((idea, index) => (
-                <div key={idea.id} className="item-block">
-                  <h4>{idea.title}</h4>
-                  <p><strong>Bidang:</strong> {idea.field}</p>
-                  <p><strong>Status:</strong> {idea.status}</p>
-                  <p>{idea.background}</p>
-                  <div className="actions">
-                    <button className="outline" onClick={() => setEditingIndex(index)}>Edit</button>
-                    <button onClick={() => deleteResearchIdea(idea.id)}>Hapus</button>
-                  </div>
-                </div>
-              ))}
-            </article>
-          </div>
-        </section>
+        <section id="aiiot"><h2 className="heading-md">AI & IoT Lab</h2><SearchFilter search={aiSearch} setSearch={setAiSearch} filterValue={aiFilter} setFilterValue={setAiFilter} options={['Intermediate', 'Advanced']} label="difficulty" /><div className="grid cols-3">{filteredAiIot.map((idea) => <AiIotIdeaCard key={idea.id} idea={idea} isSaved={savedAiIotIdeas.includes(idea.id)} onSave={(id) => toggleSaved(id, savedAiIotIdeas, setSavedAiIotIdeas, 'savedAiIotIdeas', 'AI/IoT idea saved')} />)}</div></section>
 
-        <section id="aiiot">
-          <p className="eyebrow">Eksperimen Lanjutan</p>
-          <h2>AI & IoT Lab</h2>
-          <SearchFilter
-            search={aiSearch}
-            setSearch={setAiSearch}
-            filterValue={aiFilter}
-            setFilterValue={setAiFilter}
-            options={['Intermediate', 'Advanced']}
-            label="difficulty"
-          />
-          <div className="grid cols-3">
-            {filteredAiIot.map((idea) => (
-              <AiIotIdeaCard
-                key={idea.id}
-                idea={idea}
-                isSaved={savedAiIotIdeas.includes(idea.id)}
-                onSave={(id) => toggleSaved(id, savedAiIotIdeas, setSavedAiIotIdeas, 'savedAiIotIdeas')}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section id="dashboard">
-          <p className="eyebrow">Ringkasan Kinerja</p>
-          <h2>Progress Dashboard</h2>
-          <DashboardStats stats={stats} />
-          <div className="actions wrap">
-            <button onClick={resetData}>Reset All Data</button>
-            <button className="outline" onClick={exportAllData}>Export Data as JSON</button>
-            <label className="btn-label">
-              Import Data from JSON
-              <input type="file" accept="application/json" onChange={handleImport} />
-            </label>
-          </div>
-        </section>
-
-        <section id="admin">
-          <p className="eyebrow">Kontrol Konten</p>
-          <h2>Admin Mini Panel</h2>
-          <p>Tambahkan data baru dan otomatis tampil di halaman terkait.</p>
-          <div className="grid cols-2">
-            <form className="card form-grid" onSubmit={(e) => handleAddCustom(e, 'topic')}>
-              <h3>Tambah Topik Baru</h3>
-              <input name="title" placeholder="Judul" required />
-              <input name="description" placeholder="Deskripsi" required />
-              <select name="level"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
-              <select name="category"><option>Biology</option><option>Technology</option><option>AI</option><option>Medicine</option><option>Research</option></select>
-              <button type="submit">Tambah Topik</button>
-            </form>
-            <form className="card form-grid" onSubmit={(e) => handleAddCustom(e, 'dataset')}>
-              <h3>Tambah Dataset Baru</h3>
-              <input name="name" placeholder="Nama Dataset" required />
-              <input name="description" placeholder="Deskripsi" required />
-              <input name="format" placeholder="Format" required />
-              <input name="samples" placeholder="Jumlah sampel" required />
-              <input name="category" placeholder="Kategori" required />
-              <button type="submit">Tambah Dataset</button>
-            </form>
-            <form className="card form-grid" onSubmit={(e) => handleAddCustom(e, 'mentor')}>
-              <h3>Tambah Mentor Baru</h3>
-              <input name="name" placeholder="Nama" required />
-              <input name="expertise" placeholder="Bidang keahlian" required />
-              <input name="guidanceLevel" placeholder="Level bimbingan" required />
-              <input name="topics" placeholder="Topik yang diajarkan" required />
-              <button type="submit">Tambah Mentor</button>
-            </form>
-            <form className="card form-grid" onSubmit={(e) => handleAddCustom(e, 'aiiot')}>
-              <h3>Tambah Ide AI-IoT Baru</h3>
-              <input name="name" placeholder="Nama ide" required />
-              <input name="description" placeholder="Deskripsi" required />
-              <input name="targetUsers" placeholder="Target pengguna" required />
-              <input name="sensors" placeholder="Sensor IoT" required />
-              <input name="aiRole" placeholder="Peran AI" required />
-              <select name="difficulty"><option>Intermediate</option><option>Advanced</option></select>
-              <button type="submit">Tambah Ide AI-IoT</button>
-            </form>
-          </div>
-        </section>
+        <section id="dashboard"><h2 className="heading-md">Progress Dashboard</h2><DashboardStats stats={stats} /><div className="actions wrap"><button className="btn-secondary" onClick={() => { resetAllData(); window.location.reload() }}>Reset</button><button className="btn-secondary" onClick={exportAllData}>Export</button><label className="btn-primary btn-label">Import<input type="file" accept="application/json" onChange={(event) => importAllData(event.target.files?.[0], (ok) => setToast(ok ? 'Import success' : 'Import failed'))} /></label></div></section>
       </main>
       <Footer />
+      {toast && <div className="toast">{toast}</div>}
     </div>
   )
 }

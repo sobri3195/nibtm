@@ -1,18 +1,27 @@
+import { memo } from 'react'
+
+const levelClass = {
+  Beginner: 'badge beginner',
+  Intermediate: 'badge intermediate',
+  Advanced: 'badge advanced',
+}
+
 function TopicCard({ topic, isSaved, isLearned, onSave, onLearn }) {
   return (
-    <article className="card">
+    <article className="topic-card card">
+      <div className="thumb" aria-hidden>🧬</div>
       <h3>{topic.title}</h3>
-      <p>{topic.description}</p>
+      <p className="body-text">{topic.description}</p>
       <div className="meta-row">
-        <span>Level: {topic.level}</span>
-        <span>Kategori: {topic.category}</span>
+        <span className={levelClass[topic.level] || 'badge'}>{topic.level}</span>
+        <span className="badge">{topic.category}</span>
       </div>
       <div className="actions">
-        <button onClick={() => onSave(topic.id)}>{isSaved ? 'Saved' : 'Save Topic'}</button>
-        <button className="outline" onClick={() => onLearn(topic.id)}>{isLearned ? 'Learned' : 'Mark as Learned'}</button>
+        <button className="btn-primary" onClick={() => onSave(topic.id)}>{isSaved ? 'Bookmarked' : 'Bookmark'}</button>
+        <button className="btn-secondary" onClick={() => onLearn(topic.id)}>{isLearned ? 'Completed' : 'Mark Complete'}</button>
       </div>
     </article>
   )
 }
 
-export default TopicCard
+export default memo(TopicCard)
