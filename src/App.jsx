@@ -15,6 +15,7 @@ import { Atom, Dna, FlaskConical, Stethoscope } from './components/icons'
 import { aiIotIdeas, datasets, learningPaths, mentors, topics, userSegments } from './data'
 import { getLearningPathById, getSafeLearningPaths } from './utils/learningPaths'
 import { exportAllData, getLocal, importAllData, resetAllData, setLocal } from './utils/storage'
+import { getNextStepLabel, getPathActionLabel, getPathProgress } from './utils/learningPath'
 
 const withCustom = (base, custom) => [...base, ...custom]
 const topicTabs = ['All', 'In Progress', 'Completed', 'Bookmarked', 'Not Started']
@@ -33,6 +34,7 @@ function App() {
   const [customMentors] = useState(getLocal('customMentors'))
   const [customAiIotIdeas] = useState(getLocal('customAiIotIdeas'))
   const [learningPathProgress, setLearningPathProgress] = useState(getLocal('learningPathProgress', {}))
+  const [selectedPathId, setSelectedPathId] = useState(learningPaths[0]?.id ?? null)
 
   const [topicSearch, setTopicSearch] = useState('')
   const [topicFilter, setTopicFilter] = useState('all')
@@ -137,6 +139,7 @@ function App() {
     const updated = { ...learningPathProgress, [pathId]: true }
     setLearningPathProgress(updated)
     setLocal('learningPathProgress', updated)
+    setSelectedPathId(pathId)
   }
 
   const selectPath = (pathId) => {
@@ -187,7 +190,7 @@ function App() {
               {safeLearningPaths.map((path, idx) => {
               const Icon = pathIcons[idx] || Dna
               const isStarted = learningPathProgress[path.id]
-              const progress = isStarted ? 48 : 8
+              const progress = getPathProgress(isStarted)
 
               return (
                 <article key={path.id} className="card learning-path-card">
@@ -249,26 +252,26 @@ function App() {
           <div className="topic-tabs" role="tablist" aria-label="Topic status filters">
             {topicTabs.map((tab) => <button key={tab} role="tab" aria-selected={tab === topicStatusFilter} className={`tab-btn ${tab === topicStatusFilter ? 'active' : ''}`} onClick={() => setTopicStatusFilter(tab)}>{tab}</button>)}
           </div>
-          <div className="grid topic-grid">
+          {filteredTopics.length === 0 ? <p className="card empty-state">No topics match your current filters.</p> : <div className="grid topic-grid">
             {filteredTopics.map((topic, i) => <div key={topic.id} className="motion-item" style={{ transitionDelay: `${i * 100}ms` }}><TopicCard topic={topic} status={getTopicStatus(topic.id)} isSaved={savedTopics.includes(topic.id)} onSave={(id) => toggleSaved(id, savedTopics, setSavedTopics, 'savedTopics', 'Topic updated')} onLearn={(id) => toggleSaved(id, learnedTopics, setLearnedTopics, 'learnedTopics', 'Progress updated')} /></div>)}
-          </div>
+          </div>}
         </MotionSection>
 
         <MotionSection id="datasets" delay={190}>
           <div className="row-between"><h2 className="heading-md">Dataset & Big Data</h2><button className="btn-secondary" onClick={() => setDatasetView((v) => (v === 'card' ? 'table' : 'card'))}>View: {datasetView}</button></div>
           <SearchFilter search={datasetSearch} setSearch={setDatasetSearch} filterValue={datasetFilter} setFilterValue={setDatasetFilter} options={[...new Set(allDatasets.map((item) => item.category))]} label="kategori" />
           {datasetView === 'card' ? (
-            <div className="grid cols-3">{filteredDatasets.map((dataset, i) => <div key={dataset.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><DatasetCard dataset={dataset} isSaved={savedDatasets.includes(dataset.id)} onSave={(id) => toggleSaved(id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')} /></div>)}</div>
+            filteredDatasets.length === 0 ? <p className="card empty-state">No datasets found for this search/filter.</p> : <div className="grid cols-3">{filteredDatasets.map((dataset, i) => <div key={dataset.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><DatasetCard dataset={dataset} isSaved={savedDatasets.includes(dataset.id)} onSave={(id) => toggleSaved(id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')} /></div>)}</div>
           ) : (
-            <div className="table-wrap card"><table><thead><tr><th>Name</th><th>Category</th><th>Format</th><th>Action</th></tr></thead><tbody>{filteredDatasets.map((d) => <tr key={d.id}><td>{d.name}</td><td>{d.category}</td><td>{d.format}</td><td><button className="btn-primary" onClick={() => toggleSaved(d.id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')}>Save</button></td></tr>)}</tbody></table></div>
+            filteredDatasets.length === 0 ? <p className="card empty-state">No datasets found for this search/filter.</p> : <div className="table-wrap card"><table><thead><tr><th>Name</th><th>Category</th><th>Format</th><th>Action</th></tr></thead><tbody>{filteredDatasets.map((d) => <tr key={d.id}><td>{d.name}</td><td>{d.category}</td><td>{d.format}</td><td><button className="btn-primary" onClick={() => toggleSaved(d.id, savedDatasets, setSavedDatasets, 'savedDatasets', 'Dataset saved')}>Save</button></td></tr>)}</tbody></table></div>
           )}
         </MotionSection>
 
-        <MotionSection id="mentors" delay={220}><h2 className="heading-md">Tutors & Mentors</h2><SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} options={[]} label="mentor" /><div className="grid cols-3">{filteredMentors.map((mentor, i) => <div key={mentor.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><MentorCard mentor={mentor} isSaved={savedMentors.includes(mentor.id)} onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors', 'Mentor saved')} /></div>)}</div></MotionSection>
+        <MotionSection id="mentors" delay={220}><h2 className="heading-md">Tutors & Mentors</h2><SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} options={[]} label="mentor" />{filteredMentors.length === 0 ? <p className="card empty-state">No mentors match your search.</p> : <div className="grid cols-3">{filteredMentors.map((mentor, i) => <div key={mentor.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><MentorCard mentor={mentor} isSaved={savedMentors.includes(mentor.id)} onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors', 'Mentor saved')} /></div>)}</div>}</MotionSection>
 
         <MotionSection id="research" delay={250}><h2 className="heading-md">Research Hub</h2><div className="grid cols-2"><ResearchIdeaForm onSubmit={saveResearchIdea} editingIdea={editingIndex !== null ? researchIdeas[editingIndex] : null} onCancelEdit={() => setEditingIndex(null)} /><article className="card"><h3>Daftar Ide Riset</h3>{researchIdeas.map((idea, index) => <div className="item-block" key={idea.id}><h4>{idea.title}</h4><p className="body-text">{idea.background}</p><button className="btn-secondary" onClick={() => setEditingIndex(index)}>Edit</button></div>)}</article></div></MotionSection>
 
-        <MotionSection id="aiiot" delay={280}><h2 className="heading-md">AI & IoT Lab</h2><SearchFilter search={aiSearch} setSearch={setAiSearch} filterValue={aiFilter} setFilterValue={setAiFilter} options={['Intermediate', 'Advanced']} label="difficulty" /><div className="grid cols-3">{filteredAiIot.map((idea) => <AiIotIdeaCard key={idea.id} idea={idea} isSaved={savedAiIotIdeas.includes(idea.id)} onSave={(id) => toggleSaved(id, savedAiIotIdeas, setSavedAiIotIdeas, 'savedAiIotIdeas', 'AI/IoT idea saved')} />)}</div></MotionSection>
+        <MotionSection id="aiiot" delay={280}><h2 className="heading-md">AI & IoT Lab</h2><SearchFilter search={aiSearch} setSearch={setAiSearch} filterValue={aiFilter} setFilterValue={setAiFilter} options={['Intermediate', 'Advanced']} label="difficulty" />{filteredAiIot.length === 0 ? <p className="card empty-state">No AI/IoT ideas found for this filter.</p> : <div className="grid cols-3">{filteredAiIot.map((idea) => <AiIotIdeaCard key={idea.id} idea={idea} isSaved={savedAiIotIdeas.includes(idea.id)} onSave={(id) => toggleSaved(id, savedAiIotIdeas, setSavedAiIotIdeas, 'savedAiIotIdeas', 'AI/IoT idea saved')} />)}</div>}</MotionSection>
 
         <MotionSection id="dashboard" delay={310}><h2 className="heading-md">Progress Dashboard</h2><DashboardStats stats={stats} /><div className="actions wrap"><button className="btn-secondary" onClick={() => { resetAllData(); window.location.reload() }}>Reset</button><button className="btn-secondary" onClick={exportAllData}>Export</button><label className="btn-primary btn-label">Import<input type="file" accept="application/json" onChange={(event) => importAllData(event.target.files?.[0], (ok) => setToast(ok ? 'Import success' : 'Import failed'))} /></label></div></MotionSection>
       </main>
