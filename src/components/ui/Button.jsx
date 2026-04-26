@@ -1,12 +1,20 @@
 import { cn } from '../../lib/utils'
 
-export default function Button({ className, variant = 'default', ...props }) {
+const variants = {
+  primary:
+    'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-soft hover:from-indigo-500 hover:to-cyan-400 active:scale-[0.99]',
+  secondary:
+    'bg-white/70 text-slate-900 ring-1 ring-slate-300 hover:bg-white dark:bg-slate-900/70 dark:text-white dark:ring-white/15 dark:hover:bg-slate-800',
+  ghost: 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800/80',
+}
+
+export default function Button({ className, variant = 'primary', asChild = false, ...props }) {
+  const Comp = asChild ? 'span' : 'button'
   return (
-    <button
+    <Comp
       className={cn(
-        'inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
-        variant === 'default' && 'bg-indigo-600 text-white hover:bg-indigo-500',
-        variant === 'secondary' && 'border border-slate-300 bg-white text-slate-900 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800',
+        'inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950 disabled:pointer-events-none disabled:opacity-50',
+        variants[variant],
         className,
       )}
       {...props}

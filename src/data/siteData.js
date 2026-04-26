@@ -7,64 +7,190 @@ export const navLinks = [
   { id: 'mentors', label: 'Mentors' },
 ]
 
-export const heroBadges = ['AI-ready', 'Biomedical Research', 'Structured Learning', 'Clinical Translation']
+export const heroTrustBadges = ['Trusted by 12+ biomedical labs', 'Industry-aligned curriculum', 'Mentor-guided outcomes']
 
 export const stats = [
-  { label: 'Learning Modules', value: '120+' },
-  { label: 'Biomedical Topics', value: '35+' },
-  { label: 'Research Datasets', value: '20+' },
-  { label: 'Expert Mentors', value: '15+' },
+  { label: 'Active Learners', value: '18K+', icon: 'Users' },
+  { label: 'Structured Modules', value: '140+', icon: 'BookOpen' },
+  { label: 'Research Datasets', value: '32', icon: 'Database' },
+  { label: 'Mentor Hours / Month', value: '900+', icon: 'Timer' },
 ]
 
-export const aboutHighlights = [
-  { title: 'Bioinformatics Foundation', description: 'Foundational biomedical data literacy from genomics to multi-omics interpretation.' },
-  { title: 'AI + IoT Biomedical Workflow', description: 'Applied pipeline from data ingestion, model training, monitoring, and reporting.' },
-  { title: 'Clinical Translation Ready', description: 'Outcome-driven modules designed for clinical relevance and real-world deployment.' },
+export const aboutCards = [
+  {
+    title: 'Foundation',
+    description: 'Master bioinformatics, biostatistics, and biomedical data literacy with guided tracks.',
+  },
+  {
+    title: 'AI Workflow',
+    description: 'Build, validate, and monitor models with practical workflow templates from real labs.',
+  },
+  {
+    title: 'Clinical Translation',
+    description: 'Bridge model insight into patient-impact thinking through translational case studies.',
+  },
 ]
 
 export const features = [
-  { title: 'Adaptive Curriculum Engine', description: 'Personalized progression based on competency and learning velocity.', badge: 'Core' },
-  { title: 'Lab-style Simulation', description: 'Hands-on biomedical scenarios with practical decision checkpoints.', badge: 'Practice' },
-  { title: 'Research-grade Projects', description: 'Capstone experiences built around publishable biomedical workflows.', badge: 'Research' },
-  { title: 'Evidence-centered Content', description: 'Curated modules with references aligned to biomedical standards.', badge: 'Validated' },
-  { title: 'Mentor Feedback Loop', description: 'Structured expert review to sharpen analysis and communication.', badge: 'Mentored' },
-  { title: 'Portfolio & Certification', description: 'Trackable outcomes for career, research, and institutional reporting.', badge: 'Career' },
+  {
+    title: 'Adaptive Learning Intelligence',
+    label: 'Core Engine',
+    description: 'NIBM 7.0 personalizes module order and difficulty based on mastery and performance data.',
+    icon: 'Sparkles',
+  },
+  {
+    title: 'Biomedical Sandbox Lab',
+    label: 'Hands-on',
+    description: 'Run practical experiments on genomics, signals, imaging, and translational workflows.',
+    icon: 'FlaskConical',
+  },
+  {
+    title: 'Clinical-ready Case Simulations',
+    label: 'Practice',
+    description: 'Train with guided decision checkpoints inspired by clinical and research realities.',
+    icon: 'HeartPulse',
+    featured: true,
+  },
+  {
+    title: 'Research Portfolio Builder',
+    label: 'Career',
+    description: 'Package projects into evidence-backed portfolios for graduate study, labs, or industry.',
+    icon: 'BriefcaseBusiness',
+  },
+  {
+    title: 'Mentor Feedback Loop',
+    label: 'Mentoring',
+    description: 'Receive structured reviews from biomedical experts to improve rigor and communication.',
+    icon: 'MessageCircleHeart',
+  },
+  {
+    title: 'Progress Analytics',
+    label: 'Insights',
+    description: 'Track competency growth with outcome-based analytics and skill-gap recommendations.',
+    icon: 'ChartNoAxesCombined',
+  },
 ]
 
-export const learningPaths = [
-  { id: 'beginner', level: 'Beginner', title: 'Biomedical Fundamentals', duration: '4 Weeks', modules: 18, progress: 72 },
-  { id: 'intermediate', level: 'Intermediate', title: 'Bioinformatics & Data Analysis', duration: '6 Weeks', modules: 26, progress: 46 },
-  { id: 'advanced', level: 'Advanced', title: 'AI for Clinical Decision Support', duration: '8 Weeks', modules: 34, progress: 28 },
-  { id: 'certification', level: 'Certification', title: 'Translational Biomedical AI', duration: '10 Weeks', modules: 42, progress: 11 },
-]
+export const pathTabs = ['Beginner', 'Intermediate', 'Advanced', 'Certification']
+
+export const learningPaths = {
+  Beginner: [
+    {
+      title: 'Biomedical Foundations',
+      description: 'Fundamentals of molecular biology, biostatistics, and data thinking.',
+      modules: 16,
+      duration: '4 weeks',
+      difficulty: 'Beginner',
+      progress: 65,
+    },
+    {
+      title: 'Intro to Bioinformatics',
+      description: 'Sequence data basics, quality control, and interpretation fundamentals.',
+      modules: 14,
+      duration: '5 weeks',
+      difficulty: 'Beginner',
+      progress: 48,
+    },
+  ],
+  Intermediate: [
+    {
+      title: 'Clinical Data Analytics',
+      description: 'Transform and analyze EHR-like datasets using reproducible workflows.',
+      modules: 20,
+      duration: '6 weeks',
+      difficulty: 'Intermediate',
+      progress: 42,
+    },
+    {
+      title: 'AI for Diagnostics',
+      description: 'Build robust models for diagnosis support with explainability checkpoints.',
+      modules: 22,
+      duration: '7 weeks',
+      difficulty: 'Intermediate',
+      progress: 35,
+    },
+  ],
+  Advanced: [
+    {
+      title: 'Multimodal Biomedical AI',
+      description: 'Fuse omics, imaging, and clinical data for real translational use cases.',
+      modules: 26,
+      duration: '8 weeks',
+      difficulty: 'Advanced',
+      progress: 21,
+    },
+    {
+      title: 'Clinical Trial Intelligence',
+      description: 'Leverage machine learning for trial optimization and patient stratification.',
+      modules: 24,
+      duration: '8 weeks',
+      difficulty: 'Advanced',
+      progress: 18,
+    },
+  ],
+  Certification: [
+    {
+      title: 'Translational Biomedical AI Professional',
+      description: 'End-to-end capstone with publication-style documentation and mentor defense.',
+      modules: 30,
+      duration: '10 weeks',
+      difficulty: 'Certification',
+      progress: 12,
+    },
+  ],
+}
 
 export const topics = [
-  { title: 'Genomics AI', level: 'Beginner', modules: 8, duration: '6h', dataset: true, category: 'AI' },
-  { title: 'Clinical NLP', level: 'Intermediate', modules: 10, duration: '8h', dataset: true, category: 'Clinical' },
-  { title: 'Digital Pathology', level: 'Advanced', modules: 12, duration: '11h', dataset: true, category: 'Imaging' },
-  { title: 'Drug Discovery ML', level: 'Advanced', modules: 14, duration: '12h', dataset: true, category: 'AI' },
-  { title: 'Biostatistics Core', level: 'Beginner', modules: 7, duration: '5h', dataset: false, category: 'Foundation' },
-  { title: 'Signal Processing ECG', level: 'Intermediate', modules: 9, duration: '7h', dataset: true, category: 'Clinical' },
-  { title: 'Multi-omics Integration', level: 'Advanced', modules: 13, duration: '10h', dataset: true, category: 'Research' },
-  { title: 'IoT Health Monitoring', level: 'Intermediate', modules: 8, duration: '6h', dataset: true, category: 'IoT' },
+  { title: 'Genomic Variant Intelligence', category: 'Genomics', modules: 9, duration: '7h', dataset: true, level: 'Intermediate' },
+  { title: 'Clinical NLP Pipeline', category: 'Clinical', modules: 10, duration: '8h', dataset: true, level: 'Intermediate' },
+  { title: 'Digital Pathology AI', category: 'Imaging', modules: 12, duration: '10h', dataset: true, level: 'Advanced' },
+  { title: 'Biostatistics Essentials', category: 'Foundation', modules: 7, duration: '5h', dataset: false, level: 'Beginner' },
+  { title: 'Wearable Signal Interpretation', category: 'IoT', modules: 8, duration: '6h', dataset: true, level: 'Intermediate' },
+  { title: 'Drug Discovery Modeling', category: 'AI', modules: 13, duration: '11h', dataset: true, level: 'Advanced' },
+  { title: 'Proteomics Data Workflow', category: 'Genomics', modules: 9, duration: '8h', dataset: true, level: 'Advanced' },
+  { title: 'Clinical Decision Support', category: 'Clinical', modules: 11, duration: '9h', dataset: true, level: 'Advanced' },
 ]
+
+export const topicCategories = ['All', 'Genomics', 'Clinical', 'Imaging', 'Foundation', 'IoT', 'AI']
 
 export const datasets = [
-  { name: 'Cancer Genomics Atlas', category: 'Genomics', records: '2.1M', format: 'CSV/FASTQ' },
-  { name: 'Chest X-Ray Cohort', category: 'Imaging', records: '890K', format: 'DICOM' },
-  { name: 'ICU Time-series Bundle', category: 'Clinical', records: '4.7M', format: 'Parquet' },
-  { name: 'Wearable Vitals Stream', category: 'IoT', records: '12.3M', format: 'JSON' },
+  { name: 'Cancer Multi-Omics Atlas', category: 'Genomics', format: 'Parquet', records: '2.5M', health: 92 },
+  { name: 'ICU Waveform Bundle', category: 'Clinical', format: 'CSV', records: '4.1M', health: 88 },
+  { name: 'Histopathology Slide Set', category: 'Imaging', format: 'DICOM', records: '980K', health: 95 },
+  { name: 'Remote Vitals Stream', category: 'IoT', format: 'JSON', records: '13.2M', health: 83 },
 ]
+
+export const datasetCategories = ['All', 'Genomics', 'Clinical', 'Imaging', 'IoT']
 
 export const mentors = [
-  { name: 'Dr. Alya Rahman', expertise: 'Clinical AI', rating: 4.9, availability: 'Available', initials: 'AR' },
-  { name: 'Prof. Mika Santoso', expertise: 'Bioinformatics', rating: 4.8, availability: 'Limited', initials: 'MS' },
-  { name: 'Dr. Nara Wijaya', expertise: 'Medical Imaging', rating: 4.9, availability: 'Available', initials: 'NW' },
-  { name: 'Dr. Rayhan Putra', expertise: 'Translational Medicine', rating: 4.7, availability: 'Available', initials: 'RP' },
+  {
+    name: 'Dr. Alya Rahman',
+    field: 'Clinical AI',
+    rating: 4.9,
+    availability: 'Open this week',
+    tags: ['Model Validation', 'Healthcare AI'],
+    initials: 'AR',
+  },
+  {
+    name: 'Prof. Mika Santoso',
+    field: 'Bioinformatics',
+    rating: 4.8,
+    availability: '2 slots left',
+    tags: ['Genomics', 'Omics Pipeline'],
+    initials: 'MS',
+  },
+  {
+    name: 'Dr. Nara Wijaya',
+    field: 'Medical Imaging',
+    rating: 4.9,
+    availability: 'Open this week',
+    tags: ['Computer Vision', 'Radiology'],
+    initials: 'NW',
+  },
 ]
 
-export const footerColumns = {
-  platform: ['Learning Paths', 'Topics', 'Datasets', 'Mentors'],
+export const footer = {
+  platform: ['Learning Paths', 'Topics', 'Datasets', 'Mentoring'],
   resources: ['Documentation', 'Research Notes', 'Community', 'FAQ'],
   contact: ['hello@nibm7.ai', '+62 812-0000-000', 'Jakarta, Indonesia'],
 }
