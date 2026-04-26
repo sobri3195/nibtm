@@ -1,0 +1,3 @@
+export default function GradientBadge({ children }) {
+  return <span className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur">{children}</span>
+}
