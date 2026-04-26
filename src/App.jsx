@@ -13,6 +13,7 @@ import Footer from './components/Footer'
 import MotionSection from './components/MotionSection'
 import { Atom, Dna, FlaskConical, Stethoscope } from './components/icons'
 import { aiIotIdeas, datasets, learningPaths, mentors, topics, userSegments } from './data'
+import { getLearningPathById, getSafeLearningPaths } from './utils/learningPaths'
 import { exportAllData, getLocal, importAllData, resetAllData, setLocal } from './utils/storage'
 
 const withCustom = (base, custom) => [...base, ...custom]
@@ -46,6 +47,7 @@ function App() {
   const [toast, setToast] = useState('')
   const [datasetView, setDatasetView] = useState('card')
   const [loading, setLoading] = useState(true)
+  const [selectedPathId, setSelectedPathId] = useState(null)
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedTopicSearch(topicSearch), 250)
@@ -72,6 +74,11 @@ function App() {
   const allDatasets = withCustom(datasets, customDatasets)
   const allMentors = withCustom(mentors, customMentors)
   const allAiIot = withCustom(aiIotIdeas, customAiIotIdeas)
+  const safeLearningPaths = useMemo(() => getSafeLearningPaths(learningPaths), [])
+  const selectedPath = useMemo(
+    () => getLearningPathById(safeLearningPaths, selectedPathId) || safeLearningPaths[0] || null,
+    [safeLearningPaths, selectedPathId],
+  )
 
   const toggleSaved = (id, current, setter, key, message = 'Saved') => {
     const updated = current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
@@ -122,12 +129,21 @@ function App() {
     setToast('Research idea updated')
   }
 
-  const workflowPercent = Math.round((Object.keys(learningPathProgress).length / learningPaths.length) * 100)
+  const workflowPercent = safeLearningPaths.length
+    ? Math.round((Object.keys(learningPathProgress).length / safeLearningPaths.length) * 100)
+    : 0
 
   const startPath = (pathId) => {
     const updated = { ...learningPathProgress, [pathId]: true }
     setLearningPathProgress(updated)
     setLocal('learningPathProgress', updated)
+  }
+
+  const selectPath = (pathId) => {
+    setSelectedPathId(pathId)
+    if (!learningPathProgress[pathId]) {
+      startPath(pathId)
+    }
   }
 
   const stats = {
@@ -161,8 +177,14 @@ function App() {
         <MotionSection id="paths" delay={130}>
           <p className="eyebrow">Belajar Terstruktur</p>
           <h2 className="heading-md">Learning Paths</h2>
-          <div className="grid cols-2">
-            {learningPaths.map((path, idx) => {
+          {safeLearningPaths.length === 0 ? (
+            <article className="card">
+              <h3>Learning paths are coming soon</h3>
+              <p className="body-text">We are preparing structured paths. Please check back shortly.</p>
+            </article>
+          ) : (
+            <div className="grid cols-2">
+              {safeLearningPaths.map((path, idx) => {
               const Icon = pathIcons[idx] || Dna
               const isStarted = learningPathProgress[path.id]
               const progress = isStarted ? 48 : 8
@@ -174,11 +196,51 @@ function App() {
                   <p className="body-text">{path.description}</p>
                   <p className="body-text">Estimated time: {path.duration}</p>
                   <div className="thin-progress"><div style={{ width: `${progress}%` }} /></div>
-                  <button className="btn-primary" onClick={() => startPath(path.id)}>{isStarted ? 'Continue Path' : 'Start Path'}</button>
+                  <a
+                    className="btn-primary"
+                    href="#path-detail"
+                    onClick={() => selectPath(path.id)}
+                  >
+                    {isStarted ? 'Continue Path' : 'Start Path'}
+                  </a>
                 </article>
               )
-            })}
-          </div>
+              })}
+            </div>
+          )}
+        </MotionSection>
+
+        <MotionSection id="path-detail" delay={145}>
+          <p className="eyebrow">Path Detail</p>
+          <h2 className="heading-md">{selectedPath ? selectedPath.name : 'Learning Path Detail'}</h2>
+          {selectedPath ? (
+            <article className="card">
+              <p className="body-text">{selectedPath.description}</p>
+              <div className="tags">
+                <span className="tag">{selectedPath.level}</span>
+                <span className="tag accent">{selectedPath.category}</span>
+                <span className="tag">{selectedPath.duration}</span>
+              </div>
+              <h3 style={{ marginTop: '16px' }}>Modules</h3>
+              {selectedPath.materials.length > 0 ? (
+                <ul>
+                  {selectedPath.materials.map((material) => <li key={material}>{material}</li>)}
+                </ul>
+              ) : (
+                <p className="body-text">Module details will be published soon.</p>
+              )}
+              <div className="actions">
+                <button className="btn-primary" onClick={() => startPath(selectedPath.id)}>
+                  {learningPathProgress[selectedPath.id] ? 'Continue Learning' : 'Start Learning'}
+                </button>
+                <a className="btn-secondary" href="#paths">Back to Learning Paths</a>
+              </div>
+            </article>
+          ) : (
+            <article className="card">
+              <p className="body-text">No learning path selected yet. Start from the Learning Paths section above.</p>
+            </article>
+          )}
         </MotionSection>
 
         <MotionSection id="topics" delay={160}>
