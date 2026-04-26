@@ -1,39 +1,16 @@
-function Footer() {
-  return (
-    <>
-      <section className="cta card" aria-label="Career call to action">
-        <h2 className="heading-md">Ready to advance your biomedical career?</h2>
-        <p>Bangun roadmap pembelajaran, riset, dan kolaborasi profesional bersama NIBM 7.0.</p>
-        <a href="#topics" className="btn-primary">Explore all topics</a>
-      </section>
+import { footerColumns } from '../data/siteData'
+import { sectionClassName } from '../lib/utils'
 
-      <footer className="footer">
-        <div className="footer-grid">
-          <div>
-            <h3>Platform</h3>
-            <a href="#about">About</a>
-            <a href="#paths">Learning Paths</a>
-            <a href="#dashboard">Dashboard</a>
-          </div>
-          <div>
-            <h3>Resources</h3>
-            <a href="#datasets">Datasets</a>
-            <a href="#mentors">Mentors</a>
-            <a href="#research">Research Hub</a>
-          </div>
-          <div>
-            <h3>Stay in the loop</h3>
-            <div className="newsletter">
-              <input type="email" placeholder="your@email.com" aria-label="Newsletter email" />
-              <button className="btn-primary">Subscribe</button>
-            </div>
-            <p>Contact: hello@nibm7.io</p>
-          </div>
-        </div>
-        <div className="copyright">© {new Date().getFullYear()} NiBTM 7.0. Built for education, collaboration, and future biomedical innovation.</div>
-      </footer>
-    </>
+export default function Footer() {
+  return (
+    <footer className="w-full border-t border-slate-200 bg-white py-12 dark:border-slate-800 dark:bg-slate-950">
+      <div className={`${sectionClassName()} grid gap-8 md:grid-cols-2 lg:grid-cols-4`}>
+        <div><h3 className="text-lg font-bold">NIBM 7.0</h3><p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Premium SaaS biomedical learning platform.</p></div>
+        <div><h4 className="font-semibold">Platform</h4>{footerColumns.platform.map((item) => <p key={item} className="mt-2 text-sm text-slate-600 dark:text-slate-300">{item}</p>)}</div>
+        <div><h4 className="font-semibold">Resources</h4>{footerColumns.resources.map((item) => <p key={item} className="mt-2 text-sm text-slate-600 dark:text-slate-300">{item}</p>)}</div>
+        <div><h4 className="font-semibold">Contact</h4>{footerColumns.contact.map((item) => <p key={item} className="mt-2 text-sm text-slate-600 dark:text-slate-300">{item}</p>)}</div>
+      </div>
+      <div className={`${sectionClassName()} mt-8 border-t border-slate-200 pt-6 text-sm text-slate-500 dark:border-slate-800`}>© {new Date().getFullYear()} NIBM 7.0. All rights reserved.</div>
+    </footer>
   )
 }
-
-export default Footer
