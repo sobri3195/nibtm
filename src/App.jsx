@@ -179,13 +179,13 @@ function App() {
   ]
 
   if (loading) {
-    return <main className="container"><div className="skeleton hero-skeleton" /><div className="skeleton" /><div className="skeleton" /></main>
+    return <main className="page-main w-full max-w-none min-h-screen overflow-x-hidden"><div className="skeleton hero-skeleton" /><div className="skeleton" /><div className="skeleton" /></main>
   }
 
   return (
     <div>
       <Navbar darkMode={darkMode} onToggleDarkMode={() => setDarkMode((prev) => !prev)} />
-      <main className="container">
+      <main className="page-main w-full max-w-none min-h-screen overflow-x-hidden">
         <Hero workflowPercent={workflowPercent} />
 
         <MotionSection id="about" delay={60}>

@@ -4,7 +4,7 @@ function Hero({ workflowPercent }) {
   const complete = workflowPercent >= 100
 
   return (
-    <section className="hero" id="home">
+    <section className="hero w-full max-w-none" id="home">
       <div className="hero-grid-overlay" aria-hidden />
       <div className="hero-vignette" aria-hidden />
       <div className="hero-content glass-panel">
