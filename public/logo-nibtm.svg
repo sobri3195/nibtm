@@ -1,0 +1,16 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="20" x2="136" y2="144" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6C5CE7"/>
+      <stop offset="1" stop-color="#00CEC9"/>
+    </linearGradient>
+    <linearGradient id="dna" x1="51" y1="42" x2="109" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#D1FAFF"/>
+    </linearGradient>
+  </defs>
+  <rect x="12" y="12" width="136" height="136" rx="40" fill="url(#bg)"/>
+  <path d="M54 44C74 62 86 98 106 116" stroke="url(#dna)" stroke-width="9" stroke-linecap="round"/>
+  <path d="M106 44C86 62 74 98 54 116" stroke="url(#dna)" stroke-width="9" stroke-linecap="round" opacity="0.95"/>
+  <path d="M62 56H98M58 70H102M56 84H104M58 98H102M62 112H98" stroke="#DFFBFF" stroke-width="6" stroke-linecap="round"/>
+</svg>

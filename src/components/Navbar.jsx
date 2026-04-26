@@ -35,7 +35,13 @@ function Navbar({ darkMode, onToggleDarkMode }) {
 
   return (
     <header className={`navbar glass ${scrolled ? 'scrolled' : ''}`} aria-label="Main navigation">
-      <a className="brand" href="#home">NIBM 7.0</a>
+      <a className="brand" href="#home" aria-label="NIBM 7.0 home page">
+        <img src="/logo-nibtm.svg" alt="NIBM logo" width="38" height="38" />
+        <span>
+          <strong>NIBM 7.0</strong>
+          <small>Future BioMed Learning Hub</small>
+        </span>
+      </a>
       <button
         className={`hamburger ${open ? 'open' : ''}`}
         aria-label="Toggle navigation menu"
