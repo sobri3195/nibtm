@@ -20,6 +20,20 @@ import { getNextStepLabel, getPathActionLabel, getPathProgress } from './utils/l
 const withCustom = (base, custom) => [...base, ...custom]
 const topicTabs = ['All', 'In Progress', 'Completed', 'Bookmarked', 'Not Started']
 const pathIcons = [Dna, FlaskConical, Stethoscope, Atom]
+const aboutHighlights = [
+  {
+    title: 'Adaptive Learning Path',
+    description: 'Kurikulum bertahap dari bio-basic sampai biomedical AI deployment.',
+  },
+  {
+    title: 'Research Ready Project',
+    description: 'Dataset, mentor, dan ide riset disusun agar siap dipakai untuk publikasi.',
+  },
+  {
+    title: 'Clinical Translation Focus',
+    description: 'Mengarahkan pembelajaran menuju dampak klinis dan inovasi kesehatan nyata.',
+  },
+]
 
 function App() {
   const [darkMode, setDarkMode] = useState(getLocal('darkMode', false))
@@ -157,6 +171,12 @@ function App() {
     savedAiIotIdeas: savedAiIotIdeas.length,
     totalTopics: allTopics.length,
   }
+  const aboutStats = [
+    { label: 'Learning Topics', value: `${allTopics.length}+` },
+    { label: 'Datasets Curated', value: `${allDatasets.length}+` },
+    { label: 'Expert Mentors', value: `${allMentors.length}+` },
+    { label: 'Ideas Submitted', value: `${researchIdeas.length}+` },
+  ]
 
   if (loading) {
     return <main className="container"><div className="skeleton hero-skeleton" /><div className="skeleton" /><div className="skeleton" /></main>
@@ -171,7 +191,23 @@ function App() {
         <MotionSection id="about" delay={60}>
           <p className="eyebrow">Tentang Platform</p>
           <h2 className="heading-md">About NIBM 7.0</h2>
-          <p className="body-text">Platform edukasi dan riset Nanoimmunobiotechnomedicine untuk pelajar hingga profesional.</p>
+          <p className="body-text about-lead">Platform edukasi dan riset Nanoimmunobiotechnomedicine untuk pelajar hingga profesional. Dirancang dengan pengalaman belajar setara SaaS premium yang clean, terstruktur, dan siap untuk workflow riset modern.</p>
+          <div className="about-stats">
+            {aboutStats.map((item) => (
+              <article key={item.label} className="about-stat-card">
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+              </article>
+            ))}
+          </div>
+          <div className="about-feature-grid">
+            {aboutHighlights.map((item) => (
+              <article key={item.title} className="about-feature-card">
+                <h3>{item.title}</h3>
+                <p className="body-text">{item.description}</p>
+              </article>
+            ))}
+          </div>
         </MotionSection>
 
         <MotionSection className="grid about-grid" delay={100}>{userSegments.map((segment, i) => <div key={segment.title} style={{ transitionDelay: `${100 + i * 100}ms` }} className="motion-item"><UserSegmentCard {...segment} /></div>)}</MotionSection>

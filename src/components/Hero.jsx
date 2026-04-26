@@ -6,13 +6,14 @@ function Hero({ workflowPercent }) {
   return (
     <section className="hero" id="home">
       <div className="hero-grid-overlay" aria-hidden />
+      <div className="hero-vignette" aria-hidden />
       <div className="hero-content glass-panel">
         <p className="chip"><Sparkles /> Future Biomedical Education Platform</p>
         <h1 className="heading-xl">
           <span>NIBM 7.0</span>
-          <small>BioInformatics Learning System</small>
+          <small>Bioinformatics & Biomedical Intelligence Learning Suite</small>
         </h1>
-        <p className="body-text">Dari fondasi biologi hingga AI + IoT untuk riset translasi klinis, dalam satu platform premium yang imersif.</p>
+        <p className="hero-description">Dari fondasi biologi molekuler hingga AI + IoT untuk riset translasi klinis, semua terstruktur dalam satu platform pembelajaran premium yang modern dan imersif.</p>
         <div className="hero-actions">
           <a className="btn-primary" href="#paths">Start Learning <ArrowRight /></a>
           <a className="btn-secondary hero-outline" href="#topics">Explore Topics</a>
