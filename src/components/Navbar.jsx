@@ -34,7 +34,7 @@ function Navbar({ darkMode, onToggleDarkMode }) {
   }, [])
 
   return (
-    <header className={`navbar glass ${scrolled ? 'scrolled' : ''}`} aria-label="Main navigation">
+    <header className={`navbar glass w-full max-w-none ${scrolled ? 'scrolled' : ''}`} aria-label="Main navigation">
       <a className="brand" href="#home" aria-label="NIBM 7.0 home page">
         <img src="/logo-nibtm.svg" alt="NIBM logo" width="38" height="38" />
         <span>
