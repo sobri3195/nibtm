@@ -11,9 +11,9 @@ function Hero({ workflowPercent }) {
         <p className="chip"><Sparkles /> Future Biomedical Education Platform</p>
         <h1 className="heading-xl">
           <span>NIBM 7.0</span>
-          <small>Bioinformatics & Biomedical Intelligence Learning Suite</small>
+          <small>Belajar Biomedical AI Lebih Cepat, Terarah, dan Siap Riset Nyata.</small>
         </h1>
-        <p className="hero-description">Dari fondasi biologi molekuler hingga AI + IoT untuk riset translasi klinis, semua terstruktur dalam satu platform pembelajaran premium yang modern dan imersif.</p>
+        <p className="hero-description">Platform premium untuk menguasai bioinformatics, biomedical intelligence, dan translational research dalam satu alur belajar modern.</p>
         <div className="hero-actions">
           <a className="btn-primary" href="#paths">Start Learning <ArrowRight /></a>
           <a className="btn-secondary hero-outline" href="#topics">Explore Topics</a>
@@ -37,6 +37,11 @@ function Hero({ workflowPercent }) {
           <span>Next: Advanced Certification</span>
         </div>
       </div>
+
+      <article className="hero-floating-stats card" aria-label="Platform highlights">
+        <strong>120+ Modules</strong>
+        <p>Biomedical AI • Bioinformatics • Clinical Translation</p>
+      </article>
 
       <div className="hero-blobs" aria-hidden>
         <div className="blob b1" />
