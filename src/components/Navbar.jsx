@@ -54,7 +54,7 @@ function Navbar({ darkMode, onToggleDarkMode }) {
       </button>
       <nav className={open ? 'show' : ''}>
         {links.map(([id, label]) => (
-          <a key={id} className={active === id ? 'active' : ''} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>
+          <a key={id} className={active === id ? 'active' : ''} href={`#${id}`} aria-current={active === id ? 'page' : undefined} onClick={() => setOpen(false)}>{label}</a>
         ))}
         <button className="theme-btn icon-only" onClick={onToggleDarkMode} aria-label="Toggle dark mode">
           {darkMode ? <Sun /> : <Moon />}
