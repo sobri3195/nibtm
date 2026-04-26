@@ -11,8 +11,8 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; color: var(--text); font-family: Inter, ui-sans-serif, system-ui, sans-serif; line-height: 1.6; background: radial-gradient(circle at top, #eef2ff 0%, var(--bg) 40%); }
-body.dark { --text: #e2e8f0; --muted: #b2c0d3; --card: rgba(15, 23, 42, 0.85); --line: rgba(148, 163, 184, 0.22); background: radial-gradient(circle at top, #0f172a 0%, #020617 55%); }
+body { margin: 0; color: var(--text); font-family: Inter, ui-sans-serif, system-ui, sans-serif; line-height: 1.6; background: radial-gradient(circle at top, #eef2ff 0%, var(--bg) 40%); background-image: radial-gradient(circle at 15% 20%, rgba(99,102,241,.15), transparent 30%), radial-gradient(circle at 90% 12%, rgba(34,211,238,.16), transparent 32%), linear-gradient(rgba(91, 33, 182, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 165, 233, .06) 1px, transparent 1px); background-size: auto, auto, 30px 30px, 30px 30px; }
+body.dark { --text: #e2e8f0; --muted: #b2c0d3; --card: rgba(15, 23, 42, 0.85); --line: rgba(148, 163, 184, 0.22); background: radial-gradient(circle at top, #0f172a 0%, #020617 55%); background-image: radial-gradient(circle at 12% 18%, rgba(79,70,229,.26), transparent 28%), radial-gradient(circle at 86% 10%, rgba(6,182,212,.22), transparent 30%), linear-gradient(rgba(148, 163, 184, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, .08) 1px, transparent 1px); background-size: auto, auto, 30px 30px, 30px 30px; }
 a { color: inherit; }
 .page-main { width: 100%; max-width: none; min-height: 100vh; overflow-x: hidden; padding: 14px 24px 88px; }
 section { margin-top: 0; padding: 88px 0; }
@@ -64,6 +64,9 @@ nav a.active::after, nav a:hover::after { transform: scaleX(1); }
 .full { width: 100%; }
 
 .hero-progress-card { position:relative; justify-self: end; width:min(520px,100%); padding:20px; color:white; z-index:3; border-color: rgba(255, 255, 255, 0.32); }
+.hero-floating-stats { position: absolute; left: clamp(20px, 5vw, 96px); bottom: 30px; z-index: 3; width: min(330px, 70vw); background: rgba(255,255,255,.88); border: 1px solid rgba(255,255,255,.45); }
+.hero-floating-stats strong { font-size: 1.4rem; color: #312e81; }
+.hero-floating-stats p { margin: 4px 0 0; color: #334155; font-weight: 600; }
 .progress-label { display:flex; justify-content:space-between; font-weight:700; margin-bottom:8px; }
 .progress-bar { width:100%; height:12px; border-radius:999px; background:rgba(255,255,255,.25); overflow:hidden; }
 .progress-bar>div { height:100%; background: linear-gradient(90deg,var(--secondary),#67e8f9); border-radius:inherit; transition: width 1.5s ease-out; }
@@ -102,8 +105,9 @@ nav a.active::after, nav a:hover::after { transform: scaleX(1); }
 .for-professional { background: linear-gradient(180deg, #f9f6ff, #efeaff); }
 .for-researcher { background: linear-gradient(180deg, #effcff, #e6f8ff); }
 
-.topic-card,.dataset-card,.mentor-card,.learning-path-card,.motion-item { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease, opacity .45s ease; }
+.topic-card,.dataset-card,.mentor-card,.learning-path-card,.motion-item,.feature-card,.topic-badge,.about-stat-card,.about-feature-card { transition: all .3s ease; }
 .topic-card:hover,.dataset-card:hover,.mentor-card:hover,.learning-path-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(108,92,231,.15); }
+.feature-card:hover,.about-stat-card:hover,.about-feature-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 40px rgba(56, 189, 248, .16); }
 .topic-card { position:relative; border:1px solid rgba(108,92,231,.15); overflow:hidden; }
 .topic-thumb { width:40px; height:40px; border-radius:999px; }
 .status { position:absolute; right:14px; top:14px; }
@@ -148,8 +152,13 @@ th,td { text-align:left; border-bottom: 1px solid var(--line); padding:10px; }
 .about-feature-card { border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(160deg, color-mix(in srgb, var(--card) 88%, #ffffff), color-mix(in srgb, var(--card) 75%, #dbeafe)); padding: 16px 18px; transition: transform .2s ease, box-shadow .2s ease; }
 .about-feature-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(79, 70, 229, 0.12); }
 .about-feature-card h3 { font-size: 1rem; margin-bottom: 6px; }
+.topic-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.topic-badge { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; background: color-mix(in srgb, var(--card) 88%, #dbeafe); border: 1px solid var(--line); font-size: .8rem; font-weight: 700; color: var(--text); cursor: pointer; }
+.topic-badge:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 14px 28px rgba(14, 165, 233, .18); }
 
 .cta { margin: 0 0 24px; width: 100%; max-width: none; text-align:center; background: linear-gradient(130deg, #5140d5, #6C5CE7, #00CEC9); color:white; }
+.final-cta { margin-top: 24px; padding: 36px; }
+.final-cta .body-text, .final-cta .eyebrow { color: rgba(255,255,255,.88); }
 .cta p { opacity:.9; }
 .footer { padding: 24px 24px 0; color: var(--muted); }
 .footer-grid { width: 100%; max-width:none; margin:0; display:grid; gap:24px; grid-template-columns: repeat(3,minmax(0,1fr)); }
@@ -181,6 +190,7 @@ th,td { text-align:left; border-bottom: 1px solid var(--line); padding:10px; }
   .hero { min-height: 620px; }
   .hero-content { padding: 28px; }
   .hero-progress-card { width: min(520px, 100%); }
+  .hero-floating-stats { position: static; width: 100%; margin-top: -6px; }
   .about-stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .about-feature-grid { grid-template-columns: 1fr; }
 }
@@ -202,6 +212,7 @@ th,td { text-align:left; border-bottom: 1px solid var(--line); padding:10px; }
   .hero-content { width: 100%; padding: 20px; }
   .heading-xl { font-size: clamp(2rem, 10vw, 3.2rem); }
   .hero-progress-card { justify-self: stretch; width: 100%; padding: 14px; }
+  .hero-floating-stats { margin-top: 0; }
   .hero-illustration { opacity: .24; justify-self: end; width: 180px; height: 180px; }
   .progress-label { font-size: .92rem; }
   .hero-progress-card .meta-row { align-items: flex-start; }

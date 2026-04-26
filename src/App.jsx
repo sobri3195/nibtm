@@ -11,7 +11,7 @@ import DashboardStats from './components/DashboardStats'
 import SearchFilter from './components/SearchFilter'
 import Footer from './components/Footer'
 import MotionSection from './components/MotionSection'
-import { Atom, Dna, FlaskConical, Stethoscope } from './components/icons'
+import { Atom, Brain, Database, Dna, FlaskConical, Microscope, Sparkles, Stethoscope, TrendUp } from './components/icons'
 import { aiIotIdeas, datasets, learningPaths, mentors, topics, userSegments } from './data'
 import { getLearningPathById, getSafeLearningPaths } from './utils/learningPaths'
 import { exportAllData, getLocal, importAllData, resetAllData, setLocal } from './utils/storage'
@@ -34,6 +34,15 @@ const aboutHighlights = [
     description: 'Mengarahkan pembelajaran menuju dampak klinis dan inovasi kesehatan nyata.',
   },
 ]
+const keyFeatures = [
+  { title: 'Adaptive AI Curriculum', description: 'Roadmap belajar personal dari dasar biomedis sampai model AI klinis.', icon: Brain },
+  { title: 'Research-Ready Workspace', description: 'Tools, dataset, dan tracker progres untuk workflow riset yang rapi.', icon: FlaskConical },
+  { title: 'Bioinformatics Engine', description: 'Belajar analisis genomik, proteomik, dan multi-omics dengan praktik nyata.', icon: Dna },
+  { title: 'Clinical Insight Modules', description: 'Materi translasi klinis agar hasil belajar relevan di dunia kesehatan.', icon: Stethoscope },
+  { title: 'Dataset Lab', description: 'Akses curated datasets untuk eksplorasi, eksperimen, dan validasi model.', icon: Database },
+  { title: 'Future Skills Sprint', description: 'Topik AI terbaru untuk menjaga skill tetap relevan dan kompetitif.', icon: TrendUp },
+]
+const topicBadges = ['Genomics AI', 'Medical Imaging', 'Drug Discovery', 'Clinical NLP', 'IoT Health Monitoring', 'Precision Medicine']
 
 function App() {
   const [darkMode, setDarkMode] = useState(getLocal('darkMode', false))
@@ -172,10 +181,10 @@ function App() {
     totalTopics: allTopics.length,
   }
   const aboutStats = [
-    { label: 'Learning Topics', value: `${allTopics.length}+` },
-    { label: 'Datasets Curated', value: `${allDatasets.length}+` },
-    { label: 'Expert Mentors', value: `${allMentors.length}+` },
-    { label: 'Ideas Submitted', value: `${researchIdeas.length}+` },
+    { label: 'Learning Modules', value: '120+' },
+    { label: 'Biomedical Topics', value: '35+' },
+    { label: 'Research Datasets', value: '20+' },
+    { label: 'Expert Mentors', value: '15+' },
   ]
 
   if (loading) {
@@ -207,6 +216,23 @@ function App() {
                 <p className="body-text">{item.description}</p>
               </article>
             ))}
+          </div>
+        </MotionSection>
+
+        <MotionSection id="features" delay={85}>
+          <p className="eyebrow">Platform Value</p>
+          <h2 className="heading-md">Designed Like Premium Biomedical SaaS</h2>
+          <div className="grid cols-3">
+            {keyFeatures.map((item, idx) => {
+              const Icon = item.icon
+              return (
+                <article key={item.title} className="card feature-card motion-item" style={{ transitionDelay: `${idx * 70}ms` }}>
+                  <div className="icon-pill"><Icon /></div>
+                  <h3>{item.title}</h3>
+                  <p className="body-text">{item.description}</p>
+                </article>
+              )
+            })}
           </div>
         </MotionSection>
 
@@ -282,7 +308,9 @@ function App() {
         </MotionSection>
 
         <MotionSection id="topics" delay={160}>
+          <p className="eyebrow">Popular Focus</p>
           <h2 className="heading-md">Topics</h2>
+          <div className="topic-badges">{topicBadges.map((badge) => <span key={badge} className="topic-badge"><Sparkles />{badge}</span>)}</div>
           <SearchFilter search={topicSearch} setSearch={setTopicSearch} filterValue={topicFilter} setFilterValue={setTopicFilter} options={['Beginner', 'Intermediate', 'Advanced', 'Biology', 'Technology', 'AI', 'Medicine', 'Research']} label="level/kategori" />
           <div className="topic-tabs" role="tablist" aria-label="Topic status filters">
             {topicTabs.map((tab) => <button key={tab} role="tab" aria-selected={tab === topicStatusFilter} className={`tab-btn ${tab === topicStatusFilter ? 'active' : ''}`} onClick={() => setTopicStatusFilter(tab)}>{tab}</button>)}
@@ -293,6 +321,7 @@ function App() {
         </MotionSection>
 
         <MotionSection id="datasets" delay={190}>
+          <p className="eyebrow">Dataset & Research Tools</p>
           <div className="row-between"><h2 className="heading-md">Dataset & Big Data</h2><button className="btn-secondary" onClick={() => setDatasetView((v) => (v === 'card' ? 'table' : 'card'))}>View: {datasetView}</button></div>
           <SearchFilter search={datasetSearch} setSearch={setDatasetSearch} filterValue={datasetFilter} setFilterValue={setDatasetFilter} options={[...new Set(allDatasets.map((item) => item.category))]} label="kategori" />
           {datasetView === 'card' ? (
@@ -302,7 +331,19 @@ function App() {
           )}
         </MotionSection>
 
-        <MotionSection id="mentors" delay={220}><h2 className="heading-md">Tutors & Mentors</h2><SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} options={[]} label="mentor" />{filteredMentors.length === 0 ? <p className="card empty-state">No mentors match your search.</p> : <div className="grid cols-3">{filteredMentors.map((mentor, i) => <div key={mentor.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><MentorCard mentor={mentor} isSaved={savedMentors.includes(mentor.id)} onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors', 'Mentor saved')} /></div>)}</div>}</MotionSection>
+        <MotionSection id="mentors" delay={220}><p className="eyebrow">Mentor Preview</p><h2 className="heading-md">Tutors & Mentors</h2><SearchFilter search={mentorSearch} setSearch={setMentorSearch} filterValue="all" setFilterValue={() => {}} options={[]} label="mentor" />{filteredMentors.length === 0 ? <p className="card empty-state">No mentors match your search.</p> : <div className="grid cols-3">{filteredMentors.map((mentor, i) => <div key={mentor.id} className="motion-item" style={{ transitionDelay: `${i * 70}ms` }}><MentorCard mentor={mentor} isSaved={savedMentors.includes(mentor.id)} onSave={(id) => toggleSaved(id, savedMentors, setSavedMentors, 'savedMentors', 'Mentor saved')} /></div>)}</div>}</MotionSection>
+
+        <MotionSection id="cta" delay={235}>
+          <article className="card cta final-cta">
+            <p className="eyebrow">Ready to Start</p>
+            <h2 className="heading-md">Bangun Karier Biomedical AI Anda Bersama NIBM 7.0</h2>
+            <p className="body-text">Mulai dari modul dasar, eksplorasi topik populer, dan akselerasi riset dengan mentor ahli.</p>
+            <div className="actions">
+              <a className="btn-primary" href="#paths">Start Learning</a>
+              <a className="btn-secondary" href="#topics">Explore Topics</a>
+            </div>
+          </article>
+        </MotionSection>
 
         <MotionSection id="research" delay={250}><h2 className="heading-md">Research Hub</h2><div className="grid cols-2"><ResearchIdeaForm onSubmit={saveResearchIdea} editingIdea={editingIndex !== null ? researchIdeas[editingIndex] : null} onCancelEdit={() => setEditingIndex(null)} /><article className="card"><h3>Daftar Ide Riset</h3>{researchIdeas.map((idea, index) => <div className="item-block" key={idea.id}><h4>{idea.title}</h4><p className="body-text">{idea.background}</p><button className="btn-secondary" onClick={() => setEditingIndex(index)}>Edit</button></div>)}</article></div></MotionSection>
 

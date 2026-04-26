@@ -4,11 +4,12 @@ import { Moon, Sun } from './icons'
 const links = [
   ['home', 'Home'],
   ['about', 'About'],
+  ['features', 'Features'],
   ['paths', 'Learning Paths'],
   ['topics', 'Topics'],
   ['datasets', 'Datasets'],
   ['mentors', 'Mentors'],
-  ['dashboard', 'Dashboard'],
+  ['cta', 'Get Started'],
 ]
 
 function Navbar({ darkMode, onToggleDarkMode }) {
