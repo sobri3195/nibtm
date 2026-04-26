@@ -1,28 +1,45 @@
 import { useState } from 'react'
-import { learningPaths } from '../data/siteData'
-import { sectionClassName } from '../lib/utils'
-import SectionHeader from './shared/SectionHeader'
-import Card from './ui/Card'
+import { learningPaths, pathTabs } from '../data/siteData'
 import Button from './ui/Button'
-
-const tabs = ['Beginner', 'Intermediate', 'Advanced', 'Certification']
+import Card from './ui/Card'
+import Progress from './ui/Progress'
+import SectionHeader from './SectionHeader'
+import { cn } from '../lib/utils'
 
 export default function LearningPaths() {
-  const [active, setActive] = useState('Beginner')
-  const filtered = learningPaths.filter((p) => p.level === active)
+  const [activeTab, setActiveTab] = useState(pathTabs[0])
+
   return (
-    <section id="paths" className="w-full py-16 lg:py-24">
-      <SectionHeader eyebrow="Learning Paths" title="Path yang lebih besar, jelas, dan actionable." />
-      <div className={sectionClassName()}>
-        <div className="mb-6 flex flex-wrap gap-2">{tabs.map((tab) => <button key={tab} onClick={() => setActive(tab)} className={`rounded-full px-4 py-2 text-sm ${active === tab ? 'bg-indigo-600 text-white' : 'bg-slate-200 dark:bg-slate-800'}`}>{tab}</button>)}</div>
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((item) => (
-            <Card key={item.id}>
-              <p className="text-xs font-semibold uppercase text-indigo-600">{item.level}</p>
-              <h3 className="mt-2 text-xl font-bold">{item.title}</h3>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{item.modules} modules • {item.duration}</p>
-              <div className="mt-4 h-2 rounded-full bg-slate-200 dark:bg-slate-700"><div className="h-2 rounded-full bg-indigo-600" style={{ width: `${item.progress}%` }} /></div>
-              <Button className="mt-5 w-full">View Path</Button>
+    <section id="paths" className="bg-slate-50 py-16 dark:bg-slate-900 lg:py-24">
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-10 xl:px-16">
+        <SectionHeader badge="Learning Paths" title="Actionable tracks for every biomedical career stage." />
+        <div className="mb-6 flex flex-wrap gap-2">
+          {pathTabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={cn(
+                'rounded-full px-4 py-2 text-sm font-medium transition',
+                activeTab === tab
+                  ? 'bg-slate-900 text-white dark:bg-cyan-500 dark:text-slate-950'
+                  : 'bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-300',
+              )}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {learningPaths[activeTab].map((path) => (
+            <Card key={path.title}>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">{path.title}</h3>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{path.description}</p>
+              <div className="mt-4 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                <span>{path.modules} modules</span><span>•</span><span>{path.duration}</span><span>•</span><span>{path.difficulty}</span>
+              </div>
+              <Progress className="mt-4" value={path.progress} />
+              <Button className="mt-4 w-full" variant="secondary">View Path</Button>
             </Card>
           ))}
         </div>
