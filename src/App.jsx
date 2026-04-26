@@ -149,6 +149,13 @@ function App() {
     }
   }
 
+  const selectPath = (pathId) => {
+    setSelectedPathId(pathId)
+    if (!learningPathProgress[pathId]) {
+      startPath(pathId)
+    }
+  }
+
   const stats = {
     savedTopics: savedTopics.length,
     learnedTopics: learnedTopics.length,
