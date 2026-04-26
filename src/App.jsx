@@ -49,7 +49,6 @@ function App() {
   const [toast, setToast] = useState('')
   const [datasetView, setDatasetView] = useState('card')
   const [loading, setLoading] = useState(true)
-  const [selectedPathId, setSelectedPathId] = useState(null)
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedTopicSearch(topicSearch), 250)
