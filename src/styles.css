@@ -154,23 +154,30 @@ th,td { text-align:left; border-bottom: 1px solid var(--line); padding:10px; }
 @media (max-width: 768px) {
   section { padding: 54px 0; }
   .container { padding-left: 12px; padding-right: 12px; }
+  main.container { padding-top: 8px; }
   .brand small { display: none; }
   .brand strong { font-size: .94rem; }
   .hamburger { display:block; }
-  nav { position:absolute; top:64px; left:12px; right:12px; display:none; flex-direction:column; align-items:stretch; background: color-mix(in srgb, var(--card) 95%, transparent); padding:12px; border:1px solid var(--line); border-radius:14px; }
+  nav { position:absolute; top:64px; left:12px; right:12px; display:none; flex-direction:column; align-items:stretch; background: color-mix(in srgb, var(--card) 95%, transparent); padding:12px; border:1px solid var(--line); border-radius:14px; box-shadow: 0 12px 32px rgba(15, 23, 42, .16); }
   nav.show { display:flex; }
+  nav a { padding: 8px 0; }
+  .theme-btn.icon-only { width:100%; }
   .cols-2,.cols-3,.about-grid { grid-template-columns: 1fr; }
   .toolbar,.newsletter { flex-direction:column; }
-  .hero { min-height: 600px; padding: 16px; }
+  .hero { min-height: 540px; padding: 16px; }
   .hero-content { padding: 20px; }
   .heading-xl { font-size: clamp(2rem, 10vw, 3.2rem); }
   .hero-progress-card { bottom: 8px; padding: 12px; }
-  .hero-illustration { opacity: .35; right: -42px; top: 14%; }
+  .hero-illustration { opacity: .24; right: -54px; top: 14%; width: 180px; height: 180px; }
+  .progress-label { font-size: .92rem; }
+  .hero-progress-card .meta-row { align-items: flex-start; }
+  .hero-progress-card .meta-row span:last-child { font-size: .9rem; color: rgba(255,255,255,.86); }
   .chip { font-size: .76rem; }
   .hero-actions .btn-primary, .hero-actions .btn-secondary { width: 100%; }
   .topic-tabs { gap: 8px; }
   .tab-btn { white-space: nowrap; padding: 12px 14px; min-height: 40px; }
   .footer-grid { grid-template-columns: 1fr; }
+  .toast { left: 12px; right: 12px; bottom: 12px; text-align: center; }
 }
 
 .empty-state { text-align: center; color: var(--muted); }
@@ -179,7 +186,10 @@ th,td { text-align:left; border-bottom: 1px solid var(--line); padding:10px; }
 
 @media (max-width: 420px) {
   .navbar { padding: 10px 12px; }
-  .hero { border-radius: 22px; min-height: 620px; }
+  .hero { border-radius: 22px; min-height: 560px; }
+  .hero-content { padding: 16px; }
+  .hero-progress-card .meta-row { flex-direction: column; gap: 4px; }
+  .milestones { margin-top: 10px; }
   .card { padding: 18px; }
   .btn-primary,.btn-secondary,button,.btn-label { padding: 12px 16px; }
 }
