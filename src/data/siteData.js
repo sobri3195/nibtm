@@ -64,11 +64,14 @@ export const topics = [
   { title: 'Biostatistics Essentials', category: 'Foundation', modules: 7, duration: '5h', dataset: false, level: 'Beginner', icon: 'FlaskConical', visualType: 'foundation', image: learningPathVisual },
   { title: 'Wearable Signal Interpretation', category: 'IoT', modules: 8, duration: '6h', dataset: true, level: 'Intermediate', icon: 'Activity', visualType: 'iot', image: datasetVisual },
   { title: 'Drug Discovery Modeling', category: 'AI', modules: 13, duration: '11h', dataset: true, level: 'Advanced', icon: 'BrainCircuit', visualType: 'ai', image: aiWorkflow },
+  { title: 'Herbal Therapeutics Fundamentals', category: 'Herbal', modules: 8, duration: '6h', dataset: false, level: 'Beginner', icon: 'Leaf', visualType: 'foundation', image: learningPathVisual },
+  { title: 'Applied Pharmacology for Biomedical Innovation', category: 'Pharmacology', modules: 12, duration: '9h', dataset: true, level: 'Intermediate', icon: 'Pill', visualType: 'clinical', image: clinicalTranslation },
+  { title: 'Artificial Intelligence for Precision Medicine', category: 'AI', modules: 14, duration: '12h', dataset: true, level: 'Advanced', icon: 'BrainCircuit', visualType: 'neural', image: aiWorkflow },
   { title: 'Proteomics Data Workflow', category: 'Genomics', modules: 9, duration: '8h', dataset: true, level: 'Advanced', icon: 'Dna', visualType: 'proteomics', image: dnaNetwork },
   { title: 'Clinical Decision Support', category: 'Clinical', modules: 11, duration: '9h', dataset: true, level: 'Advanced', icon: 'HeartPulse', visualType: 'decision', image: clinicalTranslation },
 ]
 
-export const topicCategories = ['All', 'Genomics', 'Clinical', 'Imaging', 'Foundation', 'IoT', 'AI']
+export const topicCategories = ['All', 'Genomics', 'Clinical', 'Imaging', 'Foundation', 'IoT', 'AI', 'Herbal', 'Pharmacology']
 
 export const datasets = [
   { name: 'Cancer Multi-Omics Atlas', category: 'Genomics', format: 'Parquet', records: '2.5M', health: 92, visualType: 'omics', image: datasetVisual, trend: [24, 28, 34, 44, 56, 72] },
