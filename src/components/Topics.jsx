@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Activity, BrainCircuit, Dna, FlaskConical, HeartPulse, ScanHeart, Search, Stethoscope } from 'lucide-react'
+import { Activity, BrainCircuit, Dna, FlaskConical, HeartPulse, Leaf, Pill, ScanHeart, Search, Stethoscope } from 'lucide-react'
 import { topicCategories, topics } from '../data/siteData'
 import OptimizedImage from './ui/OptimizedImage'
 import Badge from './ui/Badge'
@@ -7,7 +7,7 @@ import Card from './ui/Card'
 import SectionHeader from './SectionHeader'
 import { cn } from '../lib/utils'
 
-const iconMap = { Dna, Stethoscope, ScanHeart, FlaskConical, Activity, BrainCircuit, HeartPulse }
+const iconMap = { Dna, Stethoscope, ScanHeart, FlaskConical, Activity, BrainCircuit, HeartPulse, Leaf, Pill }
 
 export default function Topics() {
   const [query, setQuery] = useState('')
