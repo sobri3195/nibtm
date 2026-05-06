@@ -4,7 +4,7 @@ NiBTM 7.0 adalah platform pembelajaran dan ekosistem digital biomedis untuk Nano
 
 ## Proposal RIIM Kompetisi
 
-Dokumen proposal RIIM Kompetisi yang telah diperkuat narasinya tersedia di [`docs/proposal-riim-nibtm-7.md`](docs/proposal-riim-nibtm-7.md). Proposal tersebut menegaskan NiBTM 7.0 sebagai ekosistem pembelajaran, dataset/big data, website, tutor/dosen/mentor, pelajar/mahasiswa/pengguna, komunitas, dan riset digital biomedis yang selaras dengan Renstranas serta agenda kemandirian teknologi nasional.
+Dokumen proposal RIIM Kompetisi yang telah diperkuat narasinya tersedia di [`docs/proposal-riim-nibtm-7.md`](docs/proposal-riim-nibtm-7.md). Blueprint konsep, fitur, arsitektur produk, roadmap, risiko, user journey, dan pemetaan Renstranas/BRIN tersedia di [`docs/nibtm-7-product-blueprint-riim-brin.md`](docs/nibtm-7-product-blueprint-riim-brin.md). Keduanya menegaskan NiBTM 7.0 sebagai ekosistem pembelajaran, dataset/big data, website, tutor/dosen/mentor, pelajar/mahasiswa/pengguna, komunitas, dan riset digital biomedis yang selaras dengan Renstranas serta agenda kemandirian teknologi nasional.
 
 ## Tech Stack
 - React
