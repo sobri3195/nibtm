@@ -6,7 +6,7 @@ import Card from './ui/Card'
 import SectionHeader from './SectionHeader'
 import GradientAvatar from './visuals/GradientAvatar'
 
-export default function Mentors({ data }) {
+export default function Mentors({ data, onBookSession }) {
   return (
     <section id="mentors" className="bg-white py-16 dark:bg-slate-950 lg:py-24">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10 xl:px-16">
@@ -30,7 +30,7 @@ export default function Mentors({ data }) {
               </div>
               <div className="mt-4 flex flex-wrap gap-2">{mentor.tags.map((tag) => <Badge key={tag}>{tag}</Badge>)}</div>
               <p className="mt-3 text-xs text-cyan-700 dark:text-cyan-300">● {mentor.availability}</p>
-              <Button className="mt-4 w-full">{data.ui.bookSession}</Button>
+              <Button className="mt-4 w-full" onClick={() => onBookSession?.(mentor)}>{data.ui.bookSession}</Button>
             </Card>
           ))}
         </div>

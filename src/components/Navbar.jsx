@@ -3,7 +3,7 @@ import { Globe2, Menu, Moon, Sun, X } from 'lucide-react'
 import Button from './ui/Button'
 import { cn } from '../lib/utils'
 
-export default function Navbar({ darkMode, languages, language, data, onChangeLanguage, onToggleDarkMode }) {
+export default function Navbar({ darkMode, languages, language, data, onChangeLanguage, onToggleDarkMode, onStartLearning }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -41,7 +41,7 @@ export default function Navbar({ darkMode, languages, language, data, onChangeLa
           >
             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <Button className="hidden lg:inline-flex">{data.ui.startLearning}</Button>
+          <Button className="hidden lg:inline-flex" onClick={onStartLearning}>{data.ui.startLearning}</Button>
           <button
             aria-label={data.ui.openMenu}
             onClick={() => setOpen((v) => !v)}
@@ -62,11 +62,11 @@ export default function Navbar({ darkMode, languages, language, data, onChangeLa
               </select>
             </label>
             {data.navLinks.map((item) => (
-              <a key={item.id} href={`#${item.id}`} className="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+              <a key={item.id} href={`#${item.id}`} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
                 {item.label}
               </a>
             ))}
-            <Button className="w-full">{data.ui.startLearning}</Button>
+            <Button className="w-full" onClick={() => { onStartLearning?.(); setOpen(false) }}>{data.ui.startLearning}</Button>
           </div>
         </div>
       )}
