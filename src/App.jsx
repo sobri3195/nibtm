@@ -18,7 +18,17 @@ export default function App() {
     return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
   })
   const [language, setLanguage] = useState(() => localStorage.getItem('language') || defaultLanguage)
+  const [startLearningSignal, setStartLearningSignal] = useState(0)
   const data = useMemo(() => getSiteData(language), [language])
+
+  const scrollToSection = (sectionId) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const handleStartLearning = () => {
+    setStartLearningSignal((value) => value + 1)
+    scrollToSection('paths')
+  }
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode)
@@ -35,15 +45,15 @@ export default function App() {
     <div className="w-full overflow-x-hidden bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Navbar darkMode={darkMode} languages={languages} language={language} data={data} onChangeLanguage={setLanguage} onToggleDarkMode={() => setDarkMode((v) => !v)} />
       <main>
-        <Hero data={data} />
+        <Hero data={data} onStartLearning={handleStartLearning} onExploreTopics={() => scrollToSection('topics')} />
         <Stats stats={data.stats} />
         <About data={data} />
         <Features data={data} />
-        <LearningPaths data={data} />
+        <LearningPaths data={data} startLearningSignal={startLearningSignal} />
         <Topics data={data} />
         <Datasets data={data} />
         <Mentors data={data} />
-        <FinalCTA data={data} />
+        <FinalCTA data={data} onStartLearning={handleStartLearning} onExploreCurriculum={() => scrollToSection('paths')} />
       </main>
       <Footer data={data} />
     </div>
