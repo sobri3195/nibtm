@@ -2,7 +2,7 @@ import HeroBiomedicalVisual from './visuals/HeroBiomedicalVisual'
 import Badge from './ui/Badge'
 import Button from './ui/Button'
 
-export default function Hero({ data }) {
+export default function Hero({ data, onStartLearning, onExploreTopics }) {
   return (
     <section className="relative overflow-hidden bg-slate-950 py-20 text-white lg:py-28">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.35),transparent_45%)]" />
@@ -12,8 +12,8 @@ export default function Hero({ data }) {
           <h1 className="text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl">{data.hero.title}</h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 lg:text-lg">{data.hero.description}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button>{data.ui.startLearning}</Button>
-            <Button variant="secondary">{data.ui.exploreTopics}</Button>
+            <Button onClick={onStartLearning}>{data.ui.startLearning}</Button>
+            <Button variant="secondary" onClick={onExploreTopics}>{data.ui.exploreTopics}</Button>
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
             {data.hero.trustBadges.map((badge) => (
