@@ -9,7 +9,7 @@ export default function Navbar({ darkMode, languages, language, data, onChangeLa
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/75">
       <nav className="max-w-[1440px] mx-auto flex items-center justify-between px-5 py-4 sm:px-6 lg:px-10 xl:px-16">
-        <a href="#" className="text-xl font-black tracking-tight text-slate-900 dark:text-white">NIBM 7.0</a>
+        <a href="#" className="text-xl font-black tracking-tight text-slate-900 dark:text-white">NiBTM 7.0</a>
 
         <div className="hidden items-center gap-2 lg:flex">
           {data.navLinks.map((item, idx) => (
