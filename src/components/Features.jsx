@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { BriefcaseBusiness, ChartNoAxesCombined, FlaskConical, HeartPulse, MessageCircleHeart, Sparkles } from 'lucide-react'
-import { features } from '../data/siteData'
 import OptimizedImage from './ui/OptimizedImage'
 import Badge from './ui/Badge'
 import Card from './ui/Card'
@@ -9,13 +8,13 @@ import MoleculePattern from './visuals/MoleculePattern'
 
 const iconMap = { Sparkles, FlaskConical, HeartPulse, BriefcaseBusiness, MessageCircleHeart, ChartNoAxesCombined }
 
-export default function Features() {
+export default function Features({ data }) {
   return (
     <section id="features" className="bg-white py-16 dark:bg-slate-950 lg:py-24">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10 xl:px-16">
-        <SectionHeader badge="Platform Features" title="Premium learning experience for biomedical professionals." />
+        <SectionHeader badge={data.sections.features.badge} title={data.sections.features.title} />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, idx) => {
+          {data.features.map((feature, idx) => {
             const Icon = iconMap[feature.icon]
             return (
               <motion.div key={feature.title} initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} whileHover={{ y: -4 }}>

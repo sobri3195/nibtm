@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
 import { BookOpen, Database, Timer, Users } from 'lucide-react'
-import { stats } from '../data/siteData'
 import Card from './ui/Card'
 
 const iconMap = { Users, BookOpen, Database, Timer }
 
-export default function Stats() {
+export default function Stats({ stats }) {
   return (
     <section className="bg-white py-16 dark:bg-slate-950 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-10 xl:px-16">
