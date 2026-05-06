@@ -11,6 +11,11 @@ export default function Hero({ data }) {
           <Badge className="mb-5 border-cyan-300/30 bg-cyan-300/10 text-cyan-100">{data.hero.badge}</Badge>
           <h1 className="text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl">{data.hero.title}</h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 lg:text-lg">{data.hero.description}</p>
+          {data.hero.identityNote && (
+            <p className="mt-4 max-w-2xl rounded-2xl border border-cyan-300/25 bg-cyan-300/10 px-4 py-3 text-sm leading-relaxed text-cyan-50">
+              {data.hero.identityNote}
+            </p>
+          )}
           <div className="mt-8 flex flex-wrap gap-3">
             <Button>{data.ui.startLearning}</Button>
             <Button variant="secondary">{data.ui.exploreTopics}</Button>
