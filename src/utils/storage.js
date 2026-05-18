@@ -26,10 +26,14 @@ export const setLocal = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
+const objectStorageKeys = new Set(['learningPathProgress'])
+
+const getStorageFallback = (key) => objectStorageKeys.has(key) ? {} : []
+
 export const exportAllData = () => {
   const data = {}
   storageKeys.forEach((key) => {
-    data[key] = getLocal(key, Array.isArray(data[key]) ? [] : {})
+    data[key] = getLocal(key, getStorageFallback(key))
   })
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)

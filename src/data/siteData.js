@@ -175,7 +175,7 @@ export function getSiteData(languageCode = 'en') {
   return {
     ...t,
     language: languages.find((item) => item.code === languageCode) || languages[0],
-    navLinks: t.navLinks,
+    navLinks: t.navLinks.some((item) => item.id === 'workspace') ? t.navLinks : [...t.navLinks, { id: 'workspace', label: 'Workspace' }],
     stats: t.stats.map((label, index) => ({ label, value: statValues[index], icon: statIcons[index] })),
     aboutCards: t.aboutCards.map(([title, description], index) => ({ title, description, image: aboutImages[index] })),
     features: t.features.map(([title, label, description], index) => {

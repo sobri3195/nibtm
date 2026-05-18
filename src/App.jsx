@@ -6,6 +6,7 @@ import Features from './components/Features'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
+import InteractiveWorkspace from './components/InteractiveWorkspace'
 import LearningPaths from './components/LearningPaths'
 import Mentors from './components/Mentors'
 import Navbar from './components/Navbar'
@@ -96,6 +97,7 @@ export default function App() {
         <Topics data={data} />
         <Datasets data={data} onOpenDataset={handleOpenDataset} />
         <Mentors data={data} onBookSession={handleBookSession} />
+        <InteractiveWorkspace data={data} />
         <FinalCTA data={data} onStartLearning={handleStartLearning} onExploreCurriculum={() => scrollToSection('paths')} />
       </main>
       <Footer data={data} />
